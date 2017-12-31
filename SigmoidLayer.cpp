@@ -49,6 +49,14 @@ void SigmoidLayer::setBias(float newBias, int neuron) {
 vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
 	vector<float> result(layerLength, 0);
 
+	printf("SIZE: %d, \n", inputs.size());
+
+	for(int i = 0; i < inputs.size(); i++) {
+		printf("in=%f, ", inputs[i]);
+	}
+
+	printf("\n");
+
 
 	for(int j = 0; j < layerLength; j++) {
 		for(int i = 0; i < inputLength; i++) {
@@ -67,6 +75,8 @@ vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
 vector<float> SigmoidLayer::outputs(vector<float> inputs) {
 	vector<float> z = dotAndBiased(inputs);
 
+	printf("Finished Dotting and biasing\n");
+
 	for (int i = 0; i < layerLength; i++) {
 		float sigmoidified = this->sigmoid(z[i]);
 		z[i] = sigmoidified;
@@ -80,7 +90,6 @@ float SigmoidLayer::sigmoid(float w) {
 }
 
 SigmoidLayer::~SigmoidLayer() {
-	free(this);
 }
 
 } /* namespace sigmoid */

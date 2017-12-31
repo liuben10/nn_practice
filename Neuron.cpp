@@ -43,7 +43,6 @@ float Neuron::sigmoid(float w) {
 }
 
 Neuron::~Neuron() {
-	free(this);
 }
 
 } /* namespace sigmoid */

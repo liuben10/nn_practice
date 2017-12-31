@@ -1,8 +1,34 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include "NeuralNetwork.h"
 
 using namespace std;
+using namespace sigmoid;
+
 typedef unsigned char uchar;
+
+class Wrapper {
+private:
+	int expected;
+	vector<float> values;
+public:
+	int getExpected() {
+		return this->expected;
+	}
+
+	vector<float> getValues() {
+		return this->values;
+	}
+
+	Wrapper(int expected, vector<float> values) {
+		this->expected = expected;
+		this->values = values;
+	}
+	~Wrapper() {
+		free(this);
+	}
+};
 
 int reverseInt(int i) {
     unsigned char c1, c2, c3, c4;
@@ -103,7 +129,7 @@ uchar* read_mnist_labels(string full_path, int number_of_images) {
     }
 }
 
-void showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_of_images) {
+Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_of_images) {
 
     // show a random character
     int ind;
@@ -119,18 +145,29 @@ void showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_of_i
     cout << +labels[ind] << endl;
     cout << "" << endl;
 
+    int expected = +labels[ind];
+    vector<float> * values = new vector<float>(784, 0);
+
+    Wrapper result(expected, *values);
+
     // 28 rows
     for(int i = 0; i < 28; i++) {
         // 28 cols
         for(int j = 0; j < 28; j++) {
-            if(dataset[ind][i*28+j] > 80)
+        		float cur = dataset[ind][i*28 + j];
+            if(dataset[ind][i*28+j] > 80) {
                 cout << 1;
-            else
+
+                result.getValues().push_back(cur);
+            } else {
                 cout << 0;
+                result.getValues().push_back(cur);
+            }
         }
         cout << "" << endl;
     }
 
+    return result;
 }
 
 int main()
@@ -161,7 +198,17 @@ int main()
     // cout << +labels[0];
 
     // To control if the file opening was successful
-    showRandomCharacterInBinary(dataset, labels, number_of_images);
+    	Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+
+    NeuralNetwork network = NeuralNetwork(784, 10);
+
+    vector<float> output = network.output(input.getValues());
+
+    for(int i = 0; i < output.size(); i++) {
+    		printf("finalOut = %f, ", output[i]);
+    }
+
+    printf("\n");
 
     return 0;
 }
