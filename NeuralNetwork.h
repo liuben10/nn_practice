@@ -5,10 +5,9 @@
  *      Author: liuben10
  */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <vector>
-#include "SigmoidLayer.h";
+
+#include "SigmoidLayer.h"
 
 #ifndef NEURALNETWORK_H_
 #define NEURALNETWORK_H_
@@ -22,8 +21,14 @@ class NeuralNetwork {
 	int outputDim;
 	vector<SigmoidLayer> layers;
 public:
-	vector<float> output(vector<float> input);
+	void backPropagate(vector<float> input, vector<float> y);
+	vector<float> feedForward(vector<float> input);
+	vector<float> feedForwardWithSave(vector<float> input, vector<vector<float> > zvecsCont, vector<vector<float> > activationCont);
 	NeuralNetwork(int inputDim, int outputDim);
+	vector<float> oneDimVectorMultiply(vector<float> src, vector<float> dest);
+	vector<float> hadamardProduct(vector<float> a, vector<float> b);
+	vector<float> sigmoidDeriv(vector<float> activation);
+	vector<float> costDerivative(vector<float> activation, vector<float> expected);
 	virtual ~NeuralNetwork();
 };
 

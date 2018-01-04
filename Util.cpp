@@ -1,20 +1,24 @@
 /*
- * Coster.cpp
+ * Util.cpp
  *
- *  Created on: Dec 30, 2017
+ *  Created on: Dec 31, 2017
  *      Author: liuben10
  */
 
-#include "Coster.h"
+#include "Util.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 namespace sigmoid {
 
-Coster::Coster() {
+Util::Util() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Coster::~Coster() {
+
+Util::~Util() {
 	// TODO Auto-generated destructor stub
 }
 

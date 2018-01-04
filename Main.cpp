@@ -2,6 +2,8 @@
 #include <fstream>
 #include <vector>
 #include "NeuralNetwork.h"
+#include "Coster.h"
+#include "Util.h"
 
 using namespace std;
 using namespace sigmoid;
@@ -26,7 +28,6 @@ public:
 		this->values = values;
 	}
 	~Wrapper() {
-		free(this);
 	}
 };
 
@@ -139,10 +140,12 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
 
     /* generate secret number: */
     ind = rand() % number_of_images;
+//    ind = 609;
 
     cout << "" << endl;
     cout << "Opening a  example: " << endl;
     cout << +labels[ind] << endl;
+    cout << "ind: " << ind << endl;
     cout << "" << endl;
 
     int expected = +labels[ind];
@@ -170,45 +173,111 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
     return result;
 }
 
-int main()
+
+void checkSigmoid() {
+	SigmoidLayer * sl = new SigmoidLayer(10, 4);
+	vector<vector<float> > weights;
+
+	float firstRow[10] = {0, 10, 0, 10, 0, 10, 0, 10, 0, 10};
+	vector<float> firstRowVec(firstRow, firstRow + (sizeof(firstRow) / sizeof(firstRow[0])) );
+	weights.push_back(firstRowVec);
+
+	float secondRow[10] = {0, 0, 10, 10, 0, 0, 10, 10, 0, 0};
+	vector<float> secondRowVec(secondRow, secondRow + (sizeof(secondRow) / sizeof(secondRow[0])) );
+	weights.push_back(secondRowVec);
+
+	float thirdRow[10] = {0, 0, 0, 0, 10, 10, 10, 10, 0, 0};
+	vector<float> thirdRowVec(thirdRow, thirdRow + (sizeof(thirdRow) / sizeof(thirdRow[0])) );
+	weights.push_back(thirdRowVec);
+
+	float fourthRow[10] = {0, 0, 0, 0, 0, 0, 0, 0, 10, 10};
+	vector<float> fourthRowVec(fourthRow, fourthRow + (sizeof(fourthRow) / sizeof(fourthRow[0])) );
+	weights.push_back(fourthRowVec);
+
+	sl->setWeights(weights);
+
+	float biases[4] = {-5, -5, -5, -5};
+	vector<float> biasVec(biases, biases + (sizeof(biases) / sizeof(biases[0])));
+
+	sl->setBiases(biasVec);
+
+	float inputs[10] = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
+	vector<float> inputsVec(inputs, inputs + (sizeof(inputs) / sizeof(inputs[0])));
+
+	vector<float> activations = sl->dotAndBiased(inputsVec);
+}
+
+void checkSigmoidSafe() {
+	NeuralNetwork nn = NeuralNetwork(2, 1);
+	vector<float> input = vector<float>();
+	input.push_back(1.0);
+	input.push_back(0.0);
+
+	vector<float> output = nn.feedForward(input);
+	for(int i = 0; i < output.size(); i++) {
+		printf("float=%f, ", output[i]);
+	}
+}
+
+template<typename T, typename... Args>
+static std::unique_ptr<T> make_unique(Args&&... args)
 {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+void checkMain() {
     int number_of_images;
     int image_size;
+    int BATCH_SIZE = 100;
 
     /*
         TRAINING SET - 60 000 images
     */
 
-    // Read Image
-    //uchar **dataset = read_mnist_images("[your path].../train-images.idx3-ubyte", number_of_images, image_size);
-    // Read Labels
-    //uchar *labels = read_mnist_labels("[your path].../train-labels.idx1-ubyte", number_of_images);
-
-
-    /*
-        TEST SET - 10 000 images
-    */
-
-    // Read Image
     uchar **dataset = read_mnist_images("/Users/liuben10/Downloads/train-images-idx3-ubyte", number_of_images, image_size);
     // Read Labels
     uchar *labels = read_mnist_labels("/Users/liuben10/Downloads/train-labels-idx1-ubyte", number_of_images);
 
-    // To read from the label put a + before labels[image_index] as in the next line:
-    // cout << +labels[0];
+//    for(int k = 0; k < 100; k++) {
+       	unique_ptr<Wrapper> input = make_unique<Wrapper>(showRandomCharacterInBinary(dataset, labels, number_of_images));
 
-    // To control if the file opening was successful
-    	Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+        NeuralNetwork network = NeuralNetwork(784, 10);
 
-    NeuralNetwork network = NeuralNetwork(784, 10);
+        vector<float> output = network.feedForward(input->getValues());
 
-    vector<float> output = network.output(input.getValues());
+        for(int i = 0; i < output.size(); i++) {
+        		printf("finalOut = %f,", output[i]);
+        }
 
-    for(int i = 0; i < output.size(); i++) {
-    		printf("finalOut = %f, ", output[i]);
-    }
+        vector<float> bin = Coster::toBinary(input->getExpected());
+        float evaluation = Coster::evaluate(output, bin);
 
-    printf("\n");
+        printf("\n");
+        printf("evaluation: %f, ", evaluation);
 
-    return 0;
+//        printf("\n\n == k: %d == \n\n", k);
+//    }
+
+//    return 0;
+}
+
+void checkSigmoidRand() {
+	SigmoidLayer s = SigmoidLayer(16, 10);
+	for(int i = 0; i < s.getWeights().size(); i++) {
+		for(int j = 0; j < s.getWeights()[i].size(); j++) {
+			printf("%f,", s.getWeights()[i][j]);
+		}
+		printf("\n");
+	}
+
+	for(int i = 0; i < s.getBiases().size(); i++) {
+		printf("%f\n", s.getBiases()[i]);
+	}
+}
+
+int main()
+{
+//	checkSigmoidRand();
+//	checkMain();
+	checkSigmoidSafe();
 }

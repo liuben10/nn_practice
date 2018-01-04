@@ -27,9 +27,10 @@ public:
 	void setBias(float newBias, int neuron);
 	vector<vector<float> > getWeights();
 	vector<float> getBiases();
-	float sigmoid(float input);
+	static float sigmoid(float input);
+	static float derivSigmoid(float input);
 	vector<float> dotAndBiased(vector<float> inputs);
-	vector<float> outputs(vector<float> inputs);
+	vector<float> activations(vector<float> z);
 	SigmoidLayer(int inputLength, int outputLength);
 	virtual ~SigmoidLayer();
 };

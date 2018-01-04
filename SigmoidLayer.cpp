@@ -10,6 +10,7 @@
 #include <math.h>
 #include <vector>
 #include <iostream>
+#include <random>
 
 using namespace std;
 
@@ -20,6 +21,18 @@ SigmoidLayer::SigmoidLayer(int inputLength, int layerLength) {
 	this->layerLength = layerLength;
 	this->weights = vector<vector<float> >(layerLength, vector<float>(inputLength, 0));
 	this->biases = vector<float>(layerLength, 0);
+	default_random_engine generator;
+	normal_distribution<double> distribution(-1.0, 1.0);
+
+	for(int i = 0; i < this->weights.size(); i++) {
+		for(int j = 0; j < this->weights[i].size(); j++) {
+			this->weights[i][j] = distribution(generator);
+		}
+	}
+
+	for(int i = 0; i < this->biases.size(); i++) {
+		this->biases[i] = distribution(generator);
+	}
 }
 
 vector<float> SigmoidLayer::getBiases() {
@@ -49,9 +62,9 @@ void SigmoidLayer::setBias(float newBias, int neuron) {
 vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
 	vector<float> result(layerLength, 0);
 
-	printf("SIZE: %d, \n", inputs.size());
+	printf("SIZE: %d, \n", inputLength);
 
-	for(int i = 0; i < inputs.size(); i++) {
+	for(int i = 0; i < inputLength; i++) {
 		printf("in=%f, ", inputs[i]);
 	}
 
@@ -72,21 +85,23 @@ vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
 	return result;
 }
 
-vector<float> SigmoidLayer::outputs(vector<float> inputs) {
-	vector<float> z = dotAndBiased(inputs);
-
-	printf("Finished Dotting and biasing\n");
-
+vector<float> SigmoidLayer::activations(vector<float> z) {
+	vector<float> activations = z;
 	for (int i = 0; i < layerLength; i++) {
-		float sigmoidified = this->sigmoid(z[i]);
-		z[i] = sigmoidified;
+		float sigmoidified = this->sigmoid(activations[i]);
+		activations[i] = sigmoidified;
 	}
 
-	return z;
+	return activations;
 }
 
 float SigmoidLayer::sigmoid(float w) {
 	return 1 / (1 + exp(-1 * w));
+}
+
+float SigmoidLayer::derivSigmoid(float z) {
+	float sigZ = SigmoidLayer::sigmoid(z);
+	return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
 }
 
 SigmoidLayer::~SigmoidLayer() {
@@ -94,38 +109,3 @@ SigmoidLayer::~SigmoidLayer() {
 
 } /* namespace sigmoid */
 
-using namespace sigmoid;
-using namespace std;
-
-//int main() {
-//	SigmoidLayer * sl = new SigmoidLayer(10, 4);
-//	vector<vector<float> > weights;
-//
-//	float firstRow[10] = {0, 10, 0, 10, 0, 10, 0, 10, 0, 10};
-//	vector<float> firstRowVec(firstRow, firstRow + (sizeof(firstRow) / sizeof(firstRow[0])) );
-//	weights.push_back(firstRowVec);
-//
-//	float secondRow[10] = {0, 0, 10, 10, 0, 0, 10, 10, 0, 0};
-//	vector<float> secondRowVec(secondRow, secondRow + (sizeof(secondRow) / sizeof(secondRow[0])) );
-//	weights.push_back(secondRowVec);
-//
-//	float thirdRow[10] = {0, 0, 0, 0, 10, 10, 10, 10, 0, 0};
-//	vector<float> thirdRowVec(thirdRow, thirdRow + (sizeof(thirdRow) / sizeof(thirdRow[0])) );
-//	weights.push_back(thirdRowVec);
-//
-//	float fourthRow[10] = {0, 0, 0, 0, 0, 0, 0, 0, 10, 10};
-//	vector<float> fourthRowVec(fourthRow, fourthRow + (sizeof(fourthRow) / sizeof(fourthRow[0])) );
-//	weights.push_back(fourthRowVec);
-//
-//	sl->setWeights(weights);
-//
-//	float biases[4] = {-5, -5, -5, -5};
-//	vector<float> biasVec(biases, biases + (sizeof(biases) / sizeof(biases[0])));
-//
-//	sl->setBiases(biasVec);
-//
-//	float inputs[10] = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-//	vector<float> inputsVec(inputs, inputs + (sizeof(inputs) / sizeof(inputs[0])));
-//
-//	vector<float> activations = sl->outputs(inputsVec);
-//}
