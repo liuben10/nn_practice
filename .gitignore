@@ -1,2 +1,5 @@
-/Debug/
+/Debug/*.o
+/Debug/*.mk
+/Debug/*.d
+/Debug/Sigmoid
 .settings
