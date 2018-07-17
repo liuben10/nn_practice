@@ -6,6 +6,7 @@
  */
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ public:
 	vector<float> dotAndBiased(vector<float> inputs);
 	vector<float> activations(vector<float> z);
 	SigmoidLayer(int inputLength, int outputLength);
+	string toString();
 	virtual ~SigmoidLayer();
 };
 

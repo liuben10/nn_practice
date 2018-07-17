@@ -3,7 +3,8 @@
 #include <vector>
 #include "NeuralNetwork.h"
 #include "Coster.h"
-#include "Util.h"
+#include "WeightsAndBiasUpdates.h"
+//#include "Util.h"
 
 using namespace std;
 using namespace sigmoid;
@@ -139,8 +140,8 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
     srand ( time(NULL) );
 
     /* generate secret number: */
-    ind = rand() % number_of_images;
-//    ind = 609;
+//    ind = rand() % number_of_images;
+    ind = 59879;
 
     cout << "" << endl;
     cout << "Opening a  example: " << endl;
@@ -160,7 +161,6 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
         		float cur = dataset[ind][i*28 + j];
             if(dataset[ind][i*28+j] > 80) {
                 cout << 1;
-
                 result.getValues().push_back(cur);
             } else {
                 cout << 0;
@@ -208,7 +208,9 @@ void checkSigmoid() {
 }
 
 void checkSigmoidSafe() {
-	NeuralNetwork nn = NeuralNetwork(2, 1);
+	int numLayers = 2;
+	int neurons[2] = {2, 1};
+	NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
 	vector<float> input = vector<float>();
 	input.push_back(1.0);
 	input.push_back(0.0);
@@ -239,21 +241,19 @@ void checkMain() {
     uchar *labels = read_mnist_labels("/Users/liuben10/Downloads/train-labels-idx1-ubyte", number_of_images);
 
 //    for(int k = 0; k < 100; k++) {
-       	unique_ptr<Wrapper> input = make_unique<Wrapper>(showRandomCharacterInBinary(dataset, labels, number_of_images));
+       	Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
-        NeuralNetwork network = NeuralNetwork(784, 10);
+       	int numLayers = 4;
+       	int sigmoidLayers[4] = {784, 16, 16, 10};
+        NeuralNetwork network = NeuralNetwork(sigmoidLayers, numLayers);
 
-        vector<float> output = network.feedForward(input->getValues());
+//        vector<float> output = network.feedForward(input->getValues());
 
-        for(int i = 0; i < output.size(); i++) {
-        		printf("finalOut = %f,", output[i]);
-        }
+        vector<float> expectedBin = Coster::toBinary(input.getExpected());
 
-        vector<float> bin = Coster::toBinary(input->getExpected());
-        float evaluation = Coster::evaluate(output, bin);
+        WeightsAndBiasUpdates updates = network.backPropagate(input.getValues(), expectedBin);
 
-        printf("\n");
-        printf("evaluation: %f, ", evaluation);
+        std::cout << "\n\n\n\n" <<  updates.toString() << "\n\n\n\n";
 
 //        printf("\n\n == k: %d == \n\n", k);
 //    }
@@ -278,6 +278,6 @@ void checkSigmoidRand() {
 int main()
 {
 //	checkSigmoidRand();
-//	checkMain();
-	checkSigmoidSafe();
+	checkMain();
+//	checkSigmoidSafe();
 }

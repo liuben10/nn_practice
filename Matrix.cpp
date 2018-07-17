@@ -6,7 +6,8 @@
  */
 
 #include "Matrix.h"
+#include "Util.h"
 
-namespace sigmoid {
 
-} /* namespace sigmoid */
+using namespace sigmoid;
+using namespace std;

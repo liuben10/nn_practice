@@ -12,14 +12,4 @@
 
 namespace sigmoid {
 
-Util::Util() {
-	// TODO Auto-generated constructor stub
-
-}
-
-
-Util::~Util() {
-	// TODO Auto-generated destructor stub
-}
-
 } /* namespace sigmoid */

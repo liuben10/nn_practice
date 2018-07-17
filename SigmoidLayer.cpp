@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include <string>
 
 using namespace std;
 
@@ -93,6 +94,29 @@ vector<float> SigmoidLayer::activations(vector<float> z) {
 	}
 
 	return activations;
+}
+
+string SigmoidLayer::toString() {
+	string layerString;
+	layerString.append("===============SigmoidLayer================");
+	layerString.append("\n===Weights===\n");
+	for(int i = 0; i < this->weights.size(); i++) {
+		string row;
+		for(int j = 0; j < this->weights[i].size(); j++) {
+			row.append(to_string(this->weights[i][j]));
+			row.append(", ");
+		}
+		layerString.append(row);
+		layerString.append("\n");
+	}
+	layerString.append("\n===Biases===\n");
+	for(int i = 0; i < this->biases.size(); i++) {
+		layerString.append(to_string(this->biases[i]));
+		layerString.append(", ");
+	}
+	layerString.append("\n");
+	layerString.append("==========================================");
+	return layerString;
 }
 
 float SigmoidLayer::sigmoid(float w) {

@@ -12,21 +12,40 @@
 #define UTIL_H_
 
 #include <stdlib.h>
+
 using namespace std;
 
 namespace sigmoid {
 
 class Util {
+
 public:
-	template<typename T, typename... Args>
-	static std::unique_ptr<T> make_unique(Args&&... args)
-	{
-	    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+	static vector<float> initOneDimVector(int len, float in[]) {
+		if (len == 0) {
+			return vector<float>();
+		}
+		vector<float> res = vector<float>();
+		for(int i = 0; i < len; i++) {
+			res.push_back(in[i]);
+		}
+		return res;
 	}
-	Util();
-	virtual ~Util();
+
+	static vector<vector<float> > initTwoDimVector(int row, int col, float in[][col]) {
+		vector<vector<float> > twoDimVector = vector<vector<float> >();
+		for(int i = 0; i < row; i++) {
+			vector<float> row = vector<float>();
+			for(int j = 0; j < col; j++) {
+				row.push_back(in[i][j]);
+			}
+			twoDimVector.push_back(row);
+		}
+		return twoDimVector;
+	}
 };
 
-} /* namespace sigmoid */
+
+}
+
 
 #endif /* UTIL_H_ */
