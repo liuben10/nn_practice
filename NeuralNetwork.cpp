@@ -94,12 +94,12 @@ WeightsAndBiasUpdates NeuralNetwork::backPropagate(vector<float> input, vector<f
 
 		printf("weightDims={row=%d, col=%d}", weightUpdate.size(), weightUpdate[0].size());
 
-//		for(int k = 0; k < weightUpdate.size(); k++) {
-//			for(int j = 0; j < weightUpdate[k].size(); j++) {
-//				printf("weight=%f, ", weightUpdate[k][j]);
-//			}
-//			printf("\n");
-//		}
+ 		for(int k = 0; k < weightUpdate.size(); k++) {
+			for(int j = 0; j < weightUpdate[k].size(); j++) {
+				printf("weight=%f, ", weightUpdate[k][j]);
+			}
+			printf("\n");
+		}
 
 		updates.addBiasUpdate(biasUpdate);
 		updates.addWeightUpdate(weightUpdate);
@@ -137,7 +137,7 @@ vector<float> NeuralNetwork::costDerivative(vector<float> activation, vector<flo
 	return delta;
 }
 
-vector<float> NeuralNetwork::feedForwardWithSave(vector<float> input, vector<vector<float> > zvecsCont, vector<vector<float> > activationCont) {
+vector<float> NeuralNetwork::feedForwardWithSave(vector<float> input, vector<vector<float> > * zvecsCont, vector<vector<float> > * activationCont) {
 	vector<float> lastResult = input;
 	activationCont->push_back(input);
 	for(int i = 0; i < this->layers.size(); i++) {

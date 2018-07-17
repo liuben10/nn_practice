@@ -278,6 +278,6 @@ void checkSigmoidRand() {
 int main()
 {
 //	checkSigmoidRand();
-	checkMain();
-//	checkSigmoidSafe();
+//	checkMain();
+	checkSigmoidSafe();
 }
