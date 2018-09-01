@@ -1,4 +1,5 @@
 /Debug/*.o
 /Debug/*.d
 /Debug/Sigmoid
+/Libraries
 .settings
