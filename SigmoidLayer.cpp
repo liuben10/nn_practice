@@ -6,6 +6,7 @@
  */
 
 #include "SigmoidLayer.h"
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include <math.h>
 #include <vector>
@@ -14,14 +15,15 @@
 #include <string>
 
 using namespace std;
+using namespace boost::multiprecision;
 
 namespace sigmoid {
 
   SigmoidLayer::SigmoidLayer(int inputLength, int layerLength) {
     this->inputLength = inputLength;
     this->layerLength = layerLength;
-    this->weights = vector<vector<float> >(layerLength, vector<float>(inputLength, 0));
-    this->biases = vector<float>(layerLength, 0);
+    this->weights = vector<vector<cpp_dec_float_100> >(layerLength, vector<cpp_dec_float_100>(inputLength, 0));
+    this->biases = vector<cpp_dec_float_100>(layerLength, 0);
     default_random_engine generator;
     normal_distribution<double> distribution(-1.0, 1.0);
 
@@ -36,38 +38,38 @@ namespace sigmoid {
     }
   }
 
-  vector<float> SigmoidLayer::getBiases() {
+  vector<cpp_dec_float_100> SigmoidLayer::getBiases() {
     return this->biases;
   }
 
-  vector<vector<float> > SigmoidLayer::getWeights() {
+  vector<vector<cpp_dec_float_100> > SigmoidLayer::getWeights() {
     return this->weights;
   }
 
-  void SigmoidLayer::setWeights(vector<vector<float> > newWeights) {
+  void SigmoidLayer::setWeights(vector<vector<cpp_dec_float_100> > newWeights) {
     this->weights = newWeights;
   }
 
-  void SigmoidLayer::setWeight(float newWeight, int row, int col) {
+  void SigmoidLayer::setWeight(cpp_dec_float_100 newWeight, int row, int col) {
     this->weights[row][col] = newWeight;
   }
 
-  void SigmoidLayer::setBiases(vector<float> biases) {
+  void SigmoidLayer::setBiases(vector<cpp_dec_float_100> biases) {
     this->biases = biases;
   }
 
-  void SigmoidLayer::setBias(float newBias, int neuron) {
+  void SigmoidLayer::setBias(cpp_dec_float_100 newBias, int neuron) {
     this->biases[neuron] = newBias;
   }
 
-  vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
-    vector<float> result(layerLength, 0);
+  vector<cpp_dec_float_100> SigmoidLayer::dotAndBiased(vector<cpp_dec_float_100> inputs) {
+    vector<cpp_dec_float_100> result(layerLength, 0);
     int inputLength = inputs.size();
 
     printf("SIZE: %d, \n", inputLength);
 
     for(int i = 0; i < inputLength; i++) {
-      printf("in=%f, ", inputs[i]);
+      cout << "in=" << inputs[i] << "\n";
     }
 
     printf("\n");
@@ -87,10 +89,10 @@ namespace sigmoid {
     return result;
   }
 
-  vector<float> SigmoidLayer::activations(vector<float> z) {
-    vector<float> activations = z;
+  vector<cpp_dec_float_100> SigmoidLayer::activations(vector<cpp_dec_float_100> z) {
+    vector<cpp_dec_float_100> activations = z;
     for (int i = 0; i < layerLength; i++) {
-      float sigmoidified = this->sigmoid(activations[i]);
+      cpp_dec_float_100 sigmoidified = this->sigmoid(activations[i]);
       activations[i] = sigmoidified;
     }
 
@@ -107,37 +109,34 @@ namespace sigmoid {
     return layerString;
   }
   string SigmoidLayer::weightString() {
-    string layerString;
-    layerString.append("\n===Weights===\n");
+    ostringstream o;
+    o << "\n===Weights===\n";
     for(int i = 0; i < this->weights.size(); i++) {
-      string row;
+      ostringstream row;
       for(int j = 0; j < this->weights[i].size(); j++) {
-	row.append(to_string(this->weights[i][j]));
-	row.append(", ");
+	row << this->weights[i][j] << ", ";
       }
-      layerString.append(row);
-      layerString.append("\n");
+      o << row.str() << "\n";
     }
-    return layerString;
+    return o.str();
   }
 
   string SigmoidLayer::biasString() {
-    string layerString;
-    layerString.append("\n===Biases===\n");
+    ostringstream o;
+    o << "\n===Biases===\n";
     for(int i = 0; i < this->biases.size(); i++) {
-      layerString.append(to_string(this->biases[i]));
-      layerString.append(", ");
+      o << this->biases[i] << ", ";
     }
-    layerString.append("\n");
-    return layerString;
+    o << "\n";
+    return o.str();
   }
 
-  float SigmoidLayer::sigmoid(float w) {
+  cpp_dec_float_100 SigmoidLayer::sigmoid(cpp_dec_float_100 w) {
     return 1 / (1 + exp(-1 * w));
   }
 
-  float SigmoidLayer::derivSigmoid(float z) {
-    float sigZ = SigmoidLayer::sigmoid(z);
+  cpp_dec_float_100 SigmoidLayer::derivSigmoid(cpp_dec_float_100 z) {
+    cpp_dec_float_100 sigZ = SigmoidLayer::sigmoid(z);
     return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
   }
 

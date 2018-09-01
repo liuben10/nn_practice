@@ -4,6 +4,7 @@
  *  Created on: Dec 29, 2017
  *      Author: liuben10
  */
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #ifndef NEURON_H_
 #define NEURON_H_
@@ -14,18 +15,20 @@
 #include "Input.h"
 
 using namespace std;
+using namespace boost::multiprecision;
+
 
 namespace sigmoid {
 
 class Neuron {
 private:
 	map<string, Input*> inputs;
-	float bias;
+	cpp_dec_float_100 bias;
 public:
-	float dotProduct(map<string, float> inputs);
-	float activation(map<string, float> inputs);
-	float sigmoid(float val);
-	Neuron(map<string, Input*> inputs, float bias);
+	cpp_dec_float_100 dotProduct(map<string, cpp_dec_float_100> inputs);
+	cpp_dec_float_100 activation(map<string, cpp_dec_float_100> inputs);
+	cpp_dec_float_100 sigmoid(cpp_dec_float_100 val);
+	Neuron(map<string, Input*> inputs, cpp_dec_float_100 bias);
 	virtual ~Neuron();
 };
 

@@ -4,30 +4,32 @@
  *  Created on: Dec 29, 2017
  *      Author: liuben10
  */
-
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #ifndef INPUT_H_
 #define INPUT_H_
 
 #include <string>
 using namespace std;
+using namespace boost::multiprecision;
+
 
 namespace sigmoid {
 
 class Input {
 private:
-	float weight;
+	cpp_dec_float_100 weight;
 	string id;
 public:
-	Input(string id, float weight) {
+	Input(string id, cpp_dec_float_100 weight) {
 			this->weight = weight;
 			this->id = id;
 	}
 
-	void setWeight(float weight) {
+	void setWeight(cpp_dec_float_100 weight) {
 		this->weight = weight;
 	}
 
-	float getWeight() {
+	cpp_dec_float_100 getWeight() {
 		return this->weight;
 	}
 
@@ -39,7 +41,7 @@ public:
 		this->id = id;
 	}
 
-	float product(float value) {
+	cpp_dec_float_100 product(cpp_dec_float_100 value) {
 		return this->weight * value;
 	}
 

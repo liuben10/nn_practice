@@ -5,6 +5,8 @@
  *      Author: liuben10
  */
 
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
 #include "Neuron.h"
 #include <utility>
 #include <map>
@@ -15,30 +17,32 @@
 
 using namespace std;
 using std::unique_ptr;
+using namespace boost::multiprecision;
+
 
 namespace sigmoid {
 
-Neuron::Neuron(map<string, Input*> inputs, float bias) {
+Neuron::Neuron(map<string, Input*> inputs, cpp_dec_float_100 bias) {
 	this->inputs = inputs;
 	this->bias = bias;
 }
 
-float Neuron::dotProduct(map<string, float> values) {
-	float totalActivation = 0;
-	for(map<string, float>::iterator iter = values.begin(); iter != values.end(); ++iter) {
+cpp_dec_float_100 Neuron::dotProduct(map<string, cpp_dec_float_100> values) {
+	cpp_dec_float_100 totalActivation = 0;
+	for(map<string, cpp_dec_float_100>::iterator iter = values.begin(); iter != values.end(); ++iter) {
 		Input * i = inputs[iter->first];
 		totalActivation += i->product(iter->second);
 	}
 	return totalActivation;
 }
 
-float Neuron::activation(map<string, float> values) {
-	float dots = this->dotProduct(values);
-	float biased = dots + this->bias;
+cpp_dec_float_100 Neuron::activation(map<string, cpp_dec_float_100> values) {
+	cpp_dec_float_100 dots = this->dotProduct(values);
+	cpp_dec_float_100 biased = dots + this->bias;
 	return this->sigmoid(biased);
 }
 
-float Neuron::sigmoid(float w) {
+cpp_dec_float_100 Neuron::sigmoid(cpp_dec_float_100 w) {
 	return 1 / (1 + exp(-1 * w));
 }
 

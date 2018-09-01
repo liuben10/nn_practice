@@ -4,6 +4,8 @@
  *  Created on: Dec 31, 2017
  *      Author: liuben10
  */
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -14,27 +16,29 @@
 #include <stdlib.h>
 
 using namespace std;
+using namespace boost::multiprecision;
+
 
 namespace sigmoid {
 
 class Util {
 
 public:
-	static vector<float> initOneDimVector(int len, float in[]) {
+	static vector<cpp_dec_float_100> initOneDimVector(int len, cpp_dec_float_100 in[]) {
 		if (len == 0) {
-			return vector<float>();
+			return vector<cpp_dec_float_100>();
 		}
-		vector<float> res = vector<float>();
+		vector<cpp_dec_float_100> res = vector<cpp_dec_float_100>();
 		for(int i = 0; i < len; i++) {
 			res.push_back(in[i]);
 		}
 		return res;
 	}
 
-	static vector<vector<float> > initTwoDimVector(int row, int col, float in[][col]) {
-		vector<vector<float> > twoDimVector = vector<vector<float> >();
+	static vector<vector<cpp_dec_float_100> > initTwoDimVector(int row, int col, cpp_dec_float_100 in[][col]) {
+		vector<vector<cpp_dec_float_100> > twoDimVector = vector<vector<cpp_dec_float_100> >();
 		for(int i = 0; i < row; i++) {
-			vector<float> row = vector<float>();
+			vector<cpp_dec_float_100> row = vector<cpp_dec_float_100>();
 			for(int j = 0; j < col; j++) {
 				row.push_back(in[i][j]);
 			}

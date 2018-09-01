@@ -4,11 +4,13 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include <vector>
 #include <math.h>
 
 using namespace std;
+using namespace boost::multiprecision;
 
 #ifndef COSTER_H_
 #define COSTER_H_
@@ -18,9 +20,9 @@ namespace sigmoid {
 class Coster {
 
 public:
-	static vector<float> toBinary(int n) {
+	static vector<cpp_dec_float_100> toBinary(int n) {
 		int cop = n;
-		vector<float> bin = vector<float>(10, 0);
+		vector<cpp_dec_float_100> bin = vector<cpp_dec_float_100>(10, 0);
 		int pos = 0;
 		while (cop > 0) {
 			int andded = cop & 1;
@@ -32,8 +34,8 @@ public:
 	}
 
 
-	static float evaluate(vector<float> actual, vector<float> expected) {
-		float totalSum = 0;
+	static cpp_dec_float_100 evaluate(vector<cpp_dec_float_100> actual, vector<cpp_dec_float_100> expected) {
+		cpp_dec_float_100 totalSum = 0;
 		int n = actual.size();
 		for(int i = 0; i < actual.size(); i++) {
 			totalSum += pow(expected[i] - actual[i], 2);

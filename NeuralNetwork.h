@@ -4,7 +4,7 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
-
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <vector>
 
 #include "SigmoidLayer.h"
@@ -14,6 +14,8 @@
 #define NEURALNETWORK_H_
 
 using namespace std;
+using namespace boost::multiprecision;
+
 
 namespace sigmoid {
 
@@ -22,14 +24,14 @@ class NeuralNetwork {
 	int outputDim;
 	vector<SigmoidLayer> layers;
 public:
-	WeightsAndBiasUpdates backPropagate(vector<float> input, vector<float> y);
-	vector<float> feedForward(vector<float> input);
-	vector<float> feedForwardWithSave(vector<float> input, vector<vector<float> > * zvecsCont, vector<vector<float> > * activationCont);
+	WeightsAndBiasUpdates backPropagate(vector<cpp_dec_float_100> input, vector<cpp_dec_float_100> y);
+	vector<cpp_dec_float_100> feedForward(vector<cpp_dec_float_100> input);
+	vector<cpp_dec_float_100> feedForwardWithSave(vector<cpp_dec_float_100> input, vector<vector<cpp_dec_float_100> > * zvecsCont, vector<vector<cpp_dec_float_100> > * activationCont);
 	NeuralNetwork(int neurons[], int numLayers);
-	vector<float> oneDimVectorMultiply(vector<float> src, vector<float> dest);
-	vector<float> hadamardProduct(vector<float> a, vector<float> b);
-	vector<float> sigmoidDeriv(vector<float> activation);
-	vector<float> costDerivative(vector<float> activation, vector<float> expected);
+	vector<cpp_dec_float_100> oneDimVectorMultiply(vector<cpp_dec_float_100> src, vector<cpp_dec_float_100> dest);
+	vector<cpp_dec_float_100> hadamardProduct(vector<cpp_dec_float_100> a, vector<cpp_dec_float_100> b);
+	vector<cpp_dec_float_100> sigmoidDeriv(vector<cpp_dec_float_100> activation);
+	vector<cpp_dec_float_100> costDerivative(vector<cpp_dec_float_100> activation, vector<cpp_dec_float_100> expected);
 	virtual ~NeuralNetwork();
 };
 
