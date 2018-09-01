@@ -32,10 +32,11 @@ CPP_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
+# Not each object file needs boost. I'm just too lazy to figure this shit out.
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I ../Libraries/boost_1_67_0 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<" -w
 	@echo 'Finished building: $<'
 	@echo ' '
 

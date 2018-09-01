@@ -17,119 +17,132 @@ using namespace std;
 
 namespace sigmoid {
 
-SigmoidLayer::SigmoidLayer(int inputLength, int layerLength) {
-	this->inputLength = inputLength;
-	this->layerLength = layerLength;
-	this->weights = vector<vector<float> >(layerLength, vector<float>(inputLength, 0));
-	this->biases = vector<float>(layerLength, 0);
-	default_random_engine generator;
-	normal_distribution<double> distribution(-1.0, 1.0);
+  SigmoidLayer::SigmoidLayer(int inputLength, int layerLength) {
+    this->inputLength = inputLength;
+    this->layerLength = layerLength;
+    this->weights = vector<vector<float> >(layerLength, vector<float>(inputLength, 0));
+    this->biases = vector<float>(layerLength, 0);
+    default_random_engine generator;
+    normal_distribution<double> distribution(-1.0, 1.0);
 
-	for(int i = 0; i < this->weights.size(); i++) {
-		for(int j = 0; j < this->weights[i].size(); j++) {
-			this->weights[i][j] = distribution(generator);
-		}
-	}
+    for(int i = 0; i < this->weights.size(); i++) {
+      for(int j = 0; j < this->weights[i].size(); j++) {
+	this->weights[i][j] = distribution(generator);
+      }
+    }
 
-	for(int i = 0; i < this->biases.size(); i++) {
-		this->biases[i] = distribution(generator);
-	}
-}
+    for(int i = 0; i < this->biases.size(); i++) {
+      this->biases[i] = distribution(generator);
+    }
+  }
 
-vector<float> SigmoidLayer::getBiases() {
-	return this->biases;
-}
+  vector<float> SigmoidLayer::getBiases() {
+    return this->biases;
+  }
 
-vector<vector<float> > SigmoidLayer::getWeights() {
-	return this->weights;
-}
+  vector<vector<float> > SigmoidLayer::getWeights() {
+    return this->weights;
+  }
 
-void SigmoidLayer::setWeights(vector<vector<float> > newWeights) {
-	this->weights = newWeights;
-}
+  void SigmoidLayer::setWeights(vector<vector<float> > newWeights) {
+    this->weights = newWeights;
+  }
 
-void SigmoidLayer::setWeight(float newWeight, int row, int col) {
-	this->weights[row][col] = newWeight;
-}
+  void SigmoidLayer::setWeight(float newWeight, int row, int col) {
+    this->weights[row][col] = newWeight;
+  }
 
-void SigmoidLayer::setBiases(vector<float> biases) {
-	this->biases = biases;
-}
+  void SigmoidLayer::setBiases(vector<float> biases) {
+    this->biases = biases;
+  }
 
-void SigmoidLayer::setBias(float newBias, int neuron) {
-	this->biases[neuron] = newBias;
-}
+  void SigmoidLayer::setBias(float newBias, int neuron) {
+    this->biases[neuron] = newBias;
+  }
 
-vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
-	vector<float> result(layerLength, 0);
+  vector<float> SigmoidLayer::dotAndBiased(vector<float> inputs) {
+    vector<float> result(layerLength, 0);
+    int inputLength = inputs.size();
 
-	printf("SIZE: %d, \n", inputLength);
+    printf("SIZE: %d, \n", inputLength);
 
-	for(int i = 0; i < inputLength; i++) {
-		printf("in=%f, ", inputs[i]);
-	}
+    for(int i = 0; i < inputLength; i++) {
+      printf("in=%f, ", inputs[i]);
+    }
 
-	printf("\n");
-
-
-	for(int j = 0; j < layerLength; j++) {
-		for(int i = 0; i < inputLength; i++) {
-			result[j] += this->weights[j][i] * inputs[i];
-		}
-	}
-
-	for(int j = 0; j < layerLength; j++) {
-		result[j] += this->biases[j];
-	}
+    printf("\n");
 
 
-	return result;
-}
+    for(int j = 0; j < layerLength; j++) {
+      for(int i = 0; i < inputLength; i++) {
+	result[j] += this->weights[j][i] * inputs[i];
+      }
+    }
 
-vector<float> SigmoidLayer::activations(vector<float> z) {
-	vector<float> activations = z;
-	for (int i = 0; i < layerLength; i++) {
-		float sigmoidified = this->sigmoid(activations[i]);
-		activations[i] = sigmoidified;
-	}
+    for(int j = 0; j < layerLength; j++) {
+      result[j] += this->biases[j];
+    }
 
-	return activations;
-}
 
-string SigmoidLayer::toString() {
-	string layerString;
-	layerString.append("===============SigmoidLayer================");
-	layerString.append("\n===Weights===\n");
-	for(int i = 0; i < this->weights.size(); i++) {
-		string row;
-		for(int j = 0; j < this->weights[i].size(); j++) {
-			row.append(to_string(this->weights[i][j]));
-			row.append(", ");
-		}
-		layerString.append(row);
-		layerString.append("\n");
-	}
-	layerString.append("\n===Biases===\n");
-	for(int i = 0; i < this->biases.size(); i++) {
-		layerString.append(to_string(this->biases[i]));
-		layerString.append(", ");
-	}
-	layerString.append("\n");
-	layerString.append("==========================================");
-	return layerString;
-}
+    return result;
+  }
 
-float SigmoidLayer::sigmoid(float w) {
-	return 1 / (1 + exp(-1 * w));
-}
+  vector<float> SigmoidLayer::activations(vector<float> z) {
+    vector<float> activations = z;
+    for (int i = 0; i < layerLength; i++) {
+      float sigmoidified = this->sigmoid(activations[i]);
+      activations[i] = sigmoidified;
+    }
 
-float SigmoidLayer::derivSigmoid(float z) {
-	float sigZ = SigmoidLayer::sigmoid(z);
-	return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
-}
+    return activations;
+  }
 
-SigmoidLayer::~SigmoidLayer() {
-}
+  string SigmoidLayer::toString() {
+    string layerString;
+    layerString.append("===============SigmoidLayer================");
+    layerString.append(this->weightString());
+    layerString.append(this->biasString());
+   
+    layerString.append("==========================================");
+    return layerString;
+  }
+  string SigmoidLayer::weightString() {
+    string layerString;
+    layerString.append("\n===Weights===\n");
+    for(int i = 0; i < this->weights.size(); i++) {
+      string row;
+      for(int j = 0; j < this->weights[i].size(); j++) {
+	row.append(to_string(this->weights[i][j]));
+	row.append(", ");
+      }
+      layerString.append(row);
+      layerString.append("\n");
+    }
+    return layerString;
+  }
+
+  string SigmoidLayer::biasString() {
+    string layerString;
+    layerString.append("\n===Biases===\n");
+    for(int i = 0; i < this->biases.size(); i++) {
+      layerString.append(to_string(this->biases[i]));
+      layerString.append(", ");
+    }
+    layerString.append("\n");
+    return layerString;
+  }
+
+  float SigmoidLayer::sigmoid(float w) {
+    return 1 / (1 + exp(-1 * w));
+  }
+
+  float SigmoidLayer::derivSigmoid(float z) {
+    float sigZ = SigmoidLayer::sigmoid(z);
+    return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
+  }
+
+  SigmoidLayer::~SigmoidLayer() {
+  }
 
 } /* namespace sigmoid */
 

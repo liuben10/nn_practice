@@ -43,7 +43,7 @@ all: Sigmoid
 Sigmoid: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	g++  -o "Sigmoid" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -I ../Libraries/boost_1_67_0 -o "Sigmoid" $(OBJS) $(USER_OBJS) $(LIBS) -w
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -51,6 +51,9 @@ Sigmoid: $(OBJS) $(USER_OBJS)
 clean:
 	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) Sigmoid
 	-@echo ' '
+
+BoostTest:
+	g++ -I ../Libraries/boost_1_67_0 ../boost_test.cpp -o "boost_test"
 
 .PHONY: all clean dependents
 

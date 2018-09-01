@@ -15,27 +15,29 @@ using namespace std;
 
 namespace sigmoid {
 
-class SigmoidLayer {
-private:
-	int inputLength;
-	int layerLength;
-	vector<vector<float> > weights;
-	vector<float> biases;
-public:
-	void setWeights(vector<vector<float> > weights);
-	void setWeight(float newWeight, int row, int col);
-	void setBiases(vector<float> biases);
-	void setBias(float newBias, int neuron);
-	vector<vector<float> > getWeights();
-	vector<float> getBiases();
-	static float sigmoid(float input);
-	static float derivSigmoid(float input);
-	vector<float> dotAndBiased(vector<float> inputs);
-	vector<float> activations(vector<float> z);
-	SigmoidLayer(int inputLength, int outputLength);
-	string toString();
-	virtual ~SigmoidLayer();
-};
+  class SigmoidLayer {
+  private:
+    int inputLength;
+    int layerLength;
+    vector<vector<float> > weights;
+    vector<float> biases;
+  public:
+    void setWeights(vector<vector<float> > weights);
+    void setWeight(float newWeight, int row, int col);
+    void setBiases(vector<float> biases);
+    void setBias(float newBias, int neuron);
+    vector<vector<float> > getWeights();
+    vector<float> getBiases();
+    static float sigmoid(float input);
+    static float derivSigmoid(float input);
+    vector<float> dotAndBiased(vector<float> inputs);
+    vector<float> activations(vector<float> z);
+    SigmoidLayer(int inputLength, int outputLength);
+    string weightString();
+    string biasString();
+    string toString();
+    virtual ~SigmoidLayer();
+  };
 
 } /* namespace sigmoid */
 
