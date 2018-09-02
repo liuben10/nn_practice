@@ -22,27 +22,27 @@ using namespace boost::multiprecision;
 
 namespace sigmoid {
 
-Neuron::Neuron(map<string, Input*> inputs, cpp_dec_float_100 bias) {
+Neuron::Neuron(map<string, Input*> inputs, number<cpp_dec_float<200> >  bias) {
 	this->inputs = inputs;
 	this->bias = bias;
 }
 
-cpp_dec_float_100 Neuron::dotProduct(map<string, cpp_dec_float_100> values) {
-	cpp_dec_float_100 totalActivation = 0;
-	for(map<string, cpp_dec_float_100>::iterator iter = values.begin(); iter != values.end(); ++iter) {
+number<cpp_dec_float<200> >  Neuron::dotProduct(map<string, number<cpp_dec_float<200> > > values) {
+	number<cpp_dec_float<200> >  totalActivation = 0;
+	for(map<string, number<cpp_dec_float<200> > >::iterator iter = values.begin(); iter != values.end(); ++iter) {
 		Input * i = inputs[iter->first];
 		totalActivation += i->product(iter->second);
 	}
 	return totalActivation;
 }
 
-cpp_dec_float_100 Neuron::activation(map<string, cpp_dec_float_100> values) {
-	cpp_dec_float_100 dots = this->dotProduct(values);
-	cpp_dec_float_100 biased = dots + this->bias;
+number<cpp_dec_float<200> >  Neuron::activation(map<string, number<cpp_dec_float<200> > > values) {
+	number<cpp_dec_float<200> >  dots = this->dotProduct(values);
+	number<cpp_dec_float<200> >  biased = dots + this->bias;
 	return this->sigmoid(biased);
 }
 
-cpp_dec_float_100 Neuron::sigmoid(cpp_dec_float_100 w) {
+number<cpp_dec_float<200> >  Neuron::sigmoid(number<cpp_dec_float<200> >  w) {
 	return 1 / (1 + exp(-1 * w));
 }
 

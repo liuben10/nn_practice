@@ -20,9 +20,9 @@ namespace sigmoid {
 class Coster {
 
 public:
-	static vector<cpp_dec_float_100> toBinary(int n) {
+	static vector<number<cpp_dec_float<200> > > toBinary(int n) {
 		int cop = n;
-		vector<cpp_dec_float_100> bin = vector<cpp_dec_float_100>(10, 0);
+		vector<number<cpp_dec_float<200> > > bin = vector<number<cpp_dec_float<200> > >(10, 0);
 		int pos = 0;
 		while (cop > 0) {
 			int andded = cop & 1;
@@ -34,8 +34,8 @@ public:
 	}
 
 
-	static cpp_dec_float_100 evaluate(vector<cpp_dec_float_100> actual, vector<cpp_dec_float_100> expected) {
-		cpp_dec_float_100 totalSum = 0;
+	static number<cpp_dec_float<200> >  evaluate(vector<number<cpp_dec_float<200> > > actual, vector<number<cpp_dec_float<200> > > expected) {
+		number<cpp_dec_float<200> >  totalSum = 0;
 		int n = actual.size();
 		for(int i = 0; i < actual.size(); i++) {
 			totalSum += pow(expected[i] - actual[i], 2);

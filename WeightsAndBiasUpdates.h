@@ -16,17 +16,20 @@ using namespace boost::multiprecision;
 
 namespace sigmoid {
 
-class WeightsAndBiasUpdates {
-private:
-	vector<vector<vector<cpp_dec_float_100> > > weightUpdates;
-	vector<vector<cpp_dec_float_100> > biasUpdates;
-public:
-	void addWeightUpdate(vector<vector<cpp_dec_float_100> > weightUpdate);
-	void addBiasUpdate(vector<cpp_dec_float_100> biasUpdate);
-	WeightsAndBiasUpdates();
-	string toString();
-	virtual ~WeightsAndBiasUpdates();
-};
+  class WeightsAndBiasUpdates {
+  private:
+    vector<vector<vector<number<cpp_dec_float<200> > > > > weightUpdates;
+    vector<vector<number<cpp_dec_float<200> > > > biasUpdates;
+  public:
+    void addWeightUpdate(vector<vector<number<cpp_dec_float<200> > > > weightUpdate);
+    void addBiasUpdate(vector<number<cpp_dec_float<200> > > biasUpdate);
+    vector<vector<number<cpp_dec_float<200> > > > weightAt(int idx);
+    vector<number<cpp_dec_float<200> > > biasAt(int idx);
+    WeightsAndBiasUpdates();
+  
+    string toString();
+    virtual ~WeightsAndBiasUpdates();
+  };
 
 } /* namespace sigmoid */
 

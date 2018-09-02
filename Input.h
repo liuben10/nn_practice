@@ -17,19 +17,19 @@ namespace sigmoid {
 
 class Input {
 private:
-	cpp_dec_float_100 weight;
+	number<cpp_dec_float<200> >  weight;
 	string id;
 public:
-	Input(string id, cpp_dec_float_100 weight) {
+	Input(string id, number<cpp_dec_float<200> >  weight) {
 			this->weight = weight;
 			this->id = id;
 	}
 
-	void setWeight(cpp_dec_float_100 weight) {
+	void setWeight(number<cpp_dec_float<200> >  weight) {
 		this->weight = weight;
 	}
 
-	cpp_dec_float_100 getWeight() {
+	number<cpp_dec_float<200> >  getWeight() {
 		return this->weight;
 	}
 
@@ -41,7 +41,7 @@ public:
 		this->id = id;
 	}
 
-	cpp_dec_float_100 product(cpp_dec_float_100 value) {
+	number<cpp_dec_float<200> >  product(number<cpp_dec_float<200> >  value) {
 		return this->weight * value;
 	}
 
