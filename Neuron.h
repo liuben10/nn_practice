@@ -23,12 +23,12 @@ namespace sigmoid {
 class Neuron {
 private:
 	map<string, Input*> inputs;
-	number<cpp_dec_float<200> >  bias;
+	number<cpp_dec_float<300> >    bias;
 public:
-	number<cpp_dec_float<200> >  dotProduct(map<string, number<cpp_dec_float<200> > > inputs);
-	number<cpp_dec_float<200> >  activation(map<string, number<cpp_dec_float<200> > > inputs);
-	number<cpp_dec_float<200> >  sigmoid(number<cpp_dec_float<200> >  val);
-	Neuron(map<string, Input*> inputs, number<cpp_dec_float<200> >  bias);
+	number<cpp_dec_float<300> >    dotProduct(map<string, number<cpp_dec_float<300> >   > inputs);
+	number<cpp_dec_float<300> >    activation(map<string, number<cpp_dec_float<300> >   > inputs);
+	number<cpp_dec_float<300> >    sigmoid(number<cpp_dec_float<300> >    val);
+	Neuron(map<string, Input*> inputs, number<cpp_dec_float<300> >    bias);
 	virtual ~Neuron();
 };
 

@@ -22,16 +22,16 @@ namespace sigmoid {
   class NeuralNetwork {
     int inputDim;
     int outputDim;
-    vector<SigmoidLayer> layers;
+    vector<SigmoidLayer *> layers;
   public:
-    WeightsAndBiasUpdates backPropagate(vector<number<cpp_dec_float<200> > > input, vector<number<cpp_dec_float<200> > > y);
-    vector<number<cpp_dec_float<200> > > feedForward(vector<number<cpp_dec_float<200> > > input);
-    vector<number<cpp_dec_float<200> > > feedForwardWithSave(vector<number<cpp_dec_float<200> > > input, vector<vector<number<cpp_dec_float<200> > > > * zvecsCont, vector<vector<number<cpp_dec_float<200> > > > * activationCont);
+    WeightsAndBiasUpdates backPropagate(vector<number<cpp_dec_float<300> >   > input, vector<number<cpp_dec_float<300> >   > y);
+    vector<number<cpp_dec_float<300> >   > feedForward(vector<number<cpp_dec_float<300> >   > input);
+    vector<number<cpp_dec_float<300> >   > feedForwardWithSave(vector<number<cpp_dec_float<300> >   > input, vector<vector<number<cpp_dec_float<300> >   > > * zvecsCont, vector<vector<number<cpp_dec_float<300> >   > > * activationCont);
     NeuralNetwork(int neurons[], int numLayers);
-    vector<number<cpp_dec_float<200> > > oneDimVectorMultiply(vector<number<cpp_dec_float<200> > > src, vector<number<cpp_dec_float<200> > > dest);
-    vector<number<cpp_dec_float<200> > > hadamardProduct(vector<number<cpp_dec_float<200> > > a, vector<number<cpp_dec_float<200> > > b);
-    vector<number<cpp_dec_float<200> > > sigmoidDeriv(vector<number<cpp_dec_float<200> > > activation);
-    vector<number<cpp_dec_float<200> > > costDerivative(vector<number<cpp_dec_float<200> > > activation, vector<number<cpp_dec_float<200> > > expected);
+    vector<number<cpp_dec_float<300> >   > oneDimVectorMultiply(vector<number<cpp_dec_float<300> >   > src, vector<number<cpp_dec_float<300> >   > dest);
+    vector<number<cpp_dec_float<300> >   > hadamardProduct(vector<number<cpp_dec_float<300> >   > a, vector<number<cpp_dec_float<300> >   > b);
+    vector<number<cpp_dec_float<300> >   > sigmoidDeriv(vector<number<cpp_dec_float<300> >   > activation);
+    vector<number<cpp_dec_float<300> >   > costDerivative(vector<number<cpp_dec_float<300> >   > activation, vector<number<cpp_dec_float<300> >   > expected);
     void applyUpdates(WeightsAndBiasUpdates *updates);
     void printNetwork();
     virtual ~NeuralNetwork();

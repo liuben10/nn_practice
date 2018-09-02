@@ -24,21 +24,21 @@ namespace sigmoid {
 class Util {
 
 public:
-	static vector<number<cpp_dec_float<200> > > initOneDimVector(int len, number<cpp_dec_float<200> >  in[]) {
+	static vector<number<cpp_dec_float<300> >   > initOneDimVector(int len, number<cpp_dec_float<300> >    in[]) {
 		if (len == 0) {
-			return vector<number<cpp_dec_float<200> > >();
+			return vector<number<cpp_dec_float<300> >   >();
 		}
-		vector<number<cpp_dec_float<200> > > res = vector<number<cpp_dec_float<200> > >();
+		vector<number<cpp_dec_float<300> >   > res = vector<number<cpp_dec_float<300> >   >();
 		for(int i = 0; i < len; i++) {
 			res.push_back(in[i]);
 		}
 		return res;
 	}
 
-	static vector<vector<number<cpp_dec_float<200> > > > initTwoDimVector(int row, int col, number<cpp_dec_float<200> >  in[][col]) {
-		vector<vector<number<cpp_dec_float<200> > > > twoDimVector = vector<vector<number<cpp_dec_float<200> > > >();
+	static vector<vector<number<cpp_dec_float<300> >   > > initTwoDimVector(int row, int col, number<cpp_dec_float<300> >    in[][col]) {
+		vector<vector<number<cpp_dec_float<300> >   > > twoDimVector = vector<vector<number<cpp_dec_float<300> >   > >();
 		for(int i = 0; i < row; i++) {
-			vector<number<cpp_dec_float<200> > > row = vector<number<cpp_dec_float<200> > >();
+			vector<number<cpp_dec_float<300> >   > row = vector<number<cpp_dec_float<300> >   >();
 			for(int j = 0; j < col; j++) {
 				row.push_back(in[i][j]);
 			}

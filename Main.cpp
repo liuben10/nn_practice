@@ -21,17 +21,17 @@ typedef unsigned char uchar;
 class Wrapper {
 private:
   int expected;
-  vector<number<cpp_dec_float<200> > > values;
+  vector<number<cpp_dec_float<300> >   > values;
 public:
   int getExpected() {
     return this->expected;
   }
 
-  vector<number<cpp_dec_float<200> > > getValues() {
+  vector<number<cpp_dec_float<300> >   > getValues() {
     return this->values;
   }
 
-  Wrapper(int expected, vector<number<cpp_dec_float<200> > > values) {
+  Wrapper(int expected, vector<number<cpp_dec_float<300> >   > values) {
     this->expected = expected;
     this->values = values;
   }
@@ -157,7 +157,7 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
   cout << "" << endl;
 
   int expected = +labels[ind];
-  vector<number<cpp_dec_float<200> > > * values = new vector<number<cpp_dec_float<200> > >(784, 0);
+  vector<number<cpp_dec_float<300> >   > * values = new vector<number<cpp_dec_float<300> >   >(784, 0);
 
   Wrapper result(expected, *values);
 
@@ -165,7 +165,7 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
   for(int i = 0; i < 28; i++) {
     // 28 cols
     for(int j = 0; j < 28; j++) {
-      number<cpp_dec_float<200> >  cur = dataset[ind][i*28 + j];
+      number<cpp_dec_float<300> >    cur = dataset[ind][i*28 + j];
       if(dataset[ind][i*28+j] > 80) {
 	cout << 1;
 	result.getValues().push_back(cur);
@@ -183,56 +183,76 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
 
 void checkSigmoid() {
   SigmoidLayer * sl = new SigmoidLayer(10, 4);
-  vector<vector<number<cpp_dec_float<200> > > > weights;
+  vector<vector<number<cpp_dec_float<300> >   > > weights;
 
-  number<cpp_dec_float<200> >  firstRow[10] = {0, 10, 0, 10, 0, 10, 0, 10, 0, 10};
-  vector<number<cpp_dec_float<200> > > firstRowVec(firstRow, firstRow + (sizeof(firstRow) / sizeof(firstRow[0])) );
+  number<cpp_dec_float<300> >    firstRow[10] = {0, 10, 0, 10, 0, 10, 0, 10, 0, 10};
+  vector<number<cpp_dec_float<300> >   > firstRowVec(firstRow, firstRow + (sizeof(firstRow) / sizeof(firstRow[0])) );
   weights.push_back(firstRowVec);
 
-  number<cpp_dec_float<200> >  secondRow[10] = {0, 0, 10, 10, 0, 0, 10, 10, 0, 0};
-  vector<number<cpp_dec_float<200> > > secondRowVec(secondRow, secondRow + (sizeof(secondRow) / sizeof(secondRow[0])) );
+  number<cpp_dec_float<300> >    secondRow[10] = {0, 0, 10, 10, 0, 0, 10, 10, 0, 0};
+  vector<number<cpp_dec_float<300> >   > secondRowVec(secondRow, secondRow + (sizeof(secondRow) / sizeof(secondRow[0])) );
   weights.push_back(secondRowVec);
 
-  number<cpp_dec_float<200> >  thirdRow[10] = {0, 0, 0, 0, 10, 10, 10, 10, 0, 0};
-  vector<number<cpp_dec_float<200> > > thirdRowVec(thirdRow, thirdRow + (sizeof(thirdRow) / sizeof(thirdRow[0])) );
+  number<cpp_dec_float<300> >    thirdRow[10] = {0, 0, 0, 0, 10, 10, 10, 10, 0, 0};
+  vector<number<cpp_dec_float<300> >   > thirdRowVec(thirdRow, thirdRow + (sizeof(thirdRow) / sizeof(thirdRow[0])) );
   weights.push_back(thirdRowVec);
 
-  number<cpp_dec_float<200> >  fourthRow[10] = {0, 0, 0, 0, 0, 0, 0, 0, 10, 10};
-  vector<number<cpp_dec_float<200> > > fourthRowVec(fourthRow, fourthRow + (sizeof(fourthRow) / sizeof(fourthRow[0])) );
+  number<cpp_dec_float<300> >    fourthRow[10] = {0, 0, 0, 0, 0, 0, 0, 0, 10, 10};
+  vector<number<cpp_dec_float<300> >   > fourthRowVec(fourthRow, fourthRow + (sizeof(fourthRow) / sizeof(fourthRow[0])) );
   weights.push_back(fourthRowVec);
 
   sl->setWeights(weights);
 
-  number<cpp_dec_float<200> >  biases[4] = {-5, -5, -5, -5};
-  vector<number<cpp_dec_float<200> > > biasVec(biases, biases + (sizeof(biases) / sizeof(biases[0])));
+  number<cpp_dec_float<300> >    biases[4] = {-5, -5, -5, -5};
+  vector<number<cpp_dec_float<300> >   > biasVec(biases, biases + (sizeof(biases) / sizeof(biases[0])));
 
   sl->setBiases(biasVec);
 
-  number<cpp_dec_float<200> >  inputs[10] = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-  vector<number<cpp_dec_float<200> > > inputsVec(inputs, inputs + (sizeof(inputs) / sizeof(inputs[0])));
+  number<cpp_dec_float<300> >    inputs[10] = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
+  vector<number<cpp_dec_float<300> >   > inputsVec(inputs, inputs + (sizeof(inputs) / sizeof(inputs[0])));
 
-  vector<number<cpp_dec_float<200> > > activations = sl->dotAndBiased(inputsVec);
+  vector<number<cpp_dec_float<300> >   > activations = sl->dotAndBiased(inputsVec);
 }
 
 void checkSigmoidSafe() {
   int numLayers = 3;
   int neurons[3] = {2, 2, 1};
   NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
-  vector<number<cpp_dec_float<200> > > input = vector<number<cpp_dec_float<200> > >();
+  for(int i = 0; i < 100; i++) {
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "ITERATION:  " << i << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+    cout << "###########################################" << "\n";
+
+    
+    vector<number<cpp_dec_float<300> >   > input = vector<number<cpp_dec_float<300> >   >();
+    input.push_back(0);
+    input.push_back(1);
+
+    vector<number<cpp_dec_float<300> >   > output = nn.feedForward(input);
+    for(int i = 0; i < output.size(); i++) {
+      cout << "Checking Sigmoid Output=" << output[i] << "\n";
+    }
+
+    vector<number<cpp_dec_float<300> >   > expected;
+    expected.push_back(1);
+    WeightsAndBiasUpdates wb = nn.backPropagate(input, expected);
+    nn.applyUpdates(&wb);
+    cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
+    nn.printNetwork();
+  }
+  
+  vector<number<cpp_dec_float<300> >   > input = vector<number<cpp_dec_float<300> >   >();
   input.push_back(0);
   input.push_back(1);
-
-  vector<number<cpp_dec_float<200> > > output = nn.feedForward(input);
-  for(int i = 0; i < output.size(); i++) {
-    cout << "Checking Sigmoid Output=" << output[i] << "\n";
-  }
-
-  vector<number<cpp_dec_float<200> > > expected;
-  expected.push_back(1);
-  WeightsAndBiasUpdates wb = nn.backPropagate(input, expected);
-  nn.applyUpdates(&wb);
-  cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
-  nn.printNetwork();
+  nn.feedForward(input);
 }
 
 template<typename T, typename... Args>
@@ -259,12 +279,12 @@ void checkMain() {
   int sigmoidLayers[4] = {784, 16, 16, 10};
   NeuralNetwork network = NeuralNetwork(sigmoidLayers, numLayers);
 
-  for(int k = 0; k < 2; k++) {
+  for(int k = 0; k < 100; k++) {
     Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
-    //        vector<number<cpp_dec_float<200> > > output = network.feedForward(input->getValues());
+    //        vector<number<cpp_dec_float<300> >   > output = network.feedForward(input->getValues());
 
-    vector<number<cpp_dec_float<200> > > expectedBin = Coster::toBinary(input.getExpected());
+    vector<number<cpp_dec_float<300> >   > expectedBin = Coster::toBinary(input.getExpected());
 
     WeightsAndBiasUpdates updates = network.backPropagate(input.getValues(), expectedBin);
 
@@ -279,7 +299,7 @@ void checkMain() {
 
   
 
-  vector<number<cpp_dec_float<200> > > output = network.feedForward(input.getValues());
+  vector<number<cpp_dec_float<300> >   > output = network.feedForward(input.getValues());
 
   for(int i = 0; i < output.size(); i++) {
     cout << output[i] << "\n";

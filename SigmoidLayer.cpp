@@ -22,8 +22,8 @@ namespace sigmoid {
   SigmoidLayer::SigmoidLayer(int inputLength, int layerLength) {
     this->inputLength = inputLength;
     this->layerLength = layerLength;
-    this->weights = vector<vector<number<cpp_dec_float<200> > > >(layerLength, vector<number<cpp_dec_float<200> > >(inputLength, 0));
-    this->biases = vector<number<cpp_dec_float<200> > >(layerLength, 0);
+    this->weights = vector<vector<number<cpp_dec_float<300> >   > >(layerLength, vector<number<cpp_dec_float<300> >   >(inputLength, 0));
+    this->biases = vector<number<cpp_dec_float<300> >   >(layerLength, 0);
     default_random_engine generator;
     normal_distribution<double> distribution(0, 0.2);
 
@@ -38,7 +38,7 @@ namespace sigmoid {
     }
   }
 
-  void SigmoidLayer::applyWeight(vector<vector<number<cpp_dec_float<200> > > > deltaW) {
+  void SigmoidLayer::applyWeight(vector<vector<number<cpp_dec_float<300> >   > > deltaW) {
     for(int i = 0; i < this->weights.size(); i++) {
       for(int j = 0; j < this->weights[i].size(); j++) {
 	this->weights[i][j] = this->weights[i][j] + deltaW[i][j];
@@ -46,38 +46,38 @@ namespace sigmoid {
     }
   }
   
-  void SigmoidLayer::applyBiases(vector<number<cpp_dec_float<200> > > deltaB) {
+  void SigmoidLayer::applyBiases(vector<number<cpp_dec_float<300> >   > deltaB) {
     for(int i = 0; i < this->biases.size(); i++) {
       this->biases[i] = this->biases[i] + deltaB[i];
     }
   }
 
-  vector<number<cpp_dec_float<200> > > SigmoidLayer::getBiases() {
+  vector<number<cpp_dec_float<300> >   > SigmoidLayer::getBiases() {
     return this->biases;
   }
 
-  vector<vector<number<cpp_dec_float<200> > > > SigmoidLayer::getWeights() {
+  vector<vector<number<cpp_dec_float<300> >   > > SigmoidLayer::getWeights() {
     return this->weights;
   }
 
-  void SigmoidLayer::setWeights(vector<vector<number<cpp_dec_float<200> > > > newWeights) {
+  void SigmoidLayer::setWeights(vector<vector<number<cpp_dec_float<300> >   > > newWeights) {
     this->weights = newWeights;
   }
 
-  void SigmoidLayer::setWeight(number<cpp_dec_float<200> >  newWeight, int row, int col) {
+  void SigmoidLayer::setWeight(number<cpp_dec_float<300> >    newWeight, int row, int col) {
     this->weights[row][col] = newWeight;
   }
 
-  void SigmoidLayer::setBiases(vector<number<cpp_dec_float<200> > > biases) {
+  void SigmoidLayer::setBiases(vector<number<cpp_dec_float<300> >   > biases) {
     this->biases = biases;
   }
 
-  void SigmoidLayer::setBias(number<cpp_dec_float<200> >  newBias, int neuron) {
+  void SigmoidLayer::setBias(number<cpp_dec_float<300> >    newBias, int neuron) {
     this->biases[neuron] = newBias;
   }
 
-  vector<number<cpp_dec_float<200> > > SigmoidLayer::dotAndBiased(vector<number<cpp_dec_float<200> > > inputs) {
-    vector<number<cpp_dec_float<200> > > result(layerLength, 0);
+  vector<number<cpp_dec_float<300> >   > SigmoidLayer::dotAndBiased(vector<number<cpp_dec_float<300> >   > inputs) {
+    vector<number<cpp_dec_float<300> >   > result(layerLength, 0);
     int inputLength = inputs.size();
 
     for(int j = 0; j < layerLength; j++) {
@@ -94,10 +94,10 @@ namespace sigmoid {
     return result;
   }
 
-  vector<number<cpp_dec_float<200> > > SigmoidLayer::activations(vector<number<cpp_dec_float<200> > > z) {
-    vector<number<cpp_dec_float<200> > > activations = z;
+  vector<number<cpp_dec_float<300> >   > SigmoidLayer::activations(vector<number<cpp_dec_float<300> >   > z) {
+    vector<number<cpp_dec_float<300> >   > activations = z;
     for (int i = 0; i < layerLength; i++) {
-      number<cpp_dec_float<200> >  sigmoidified = this->sigmoid(activations[i]);
+      number<cpp_dec_float<300> >    sigmoidified = this->sigmoid(activations[i]);
       activations[i] = sigmoidified;
     }
 
@@ -136,12 +136,13 @@ namespace sigmoid {
     return o.str();
   }
 
-  number<cpp_dec_float<200> >  SigmoidLayer::sigmoid(number<cpp_dec_float<200> >  w) {
-    return 1 / (1 + exp(-1 * w));
+  number<cpp_dec_float<300> >   SigmoidLayer::sigmoid(number<cpp_dec_float<300> >    w) {
+    number<cpp_dec_float<300> >   nate = number<cpp_dec_float<300> >  (2.718);
+    return 1 / (1 + pow(nate, -1 * w));
   }
 
-  number<cpp_dec_float<200> >  SigmoidLayer::derivSigmoid(number<cpp_dec_float<200> >  z) {
-    number<cpp_dec_float<200> >  sigZ = SigmoidLayer::sigmoid(z);
+  number<cpp_dec_float<300> >    SigmoidLayer::derivSigmoid(number<cpp_dec_float<300> >    z) {
+    number<cpp_dec_float<300> >    sigZ = SigmoidLayer::sigmoid(z);
     return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
   }
 
