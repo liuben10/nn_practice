@@ -4,7 +4,6 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <vector>
 
 #include "SigmoidLayer.h"
@@ -24,14 +23,14 @@ namespace sigmoid {
     int outputDim;
     vector<SigmoidLayer *> layers;
   public:
-    WeightsAndBiasUpdates backPropagate(vector<number<cpp_dec_float<300> >   > input, vector<number<cpp_dec_float<300> >   > y);
-    vector<number<cpp_dec_float<300> >   > feedForward(vector<number<cpp_dec_float<300> >   > input);
-    vector<number<cpp_dec_float<300> >   > feedForwardWithSave(vector<number<cpp_dec_float<300> >   > input, vector<vector<number<cpp_dec_float<300> >   > > * zvecsCont, vector<vector<number<cpp_dec_float<300> >   > > * activationCont);
+    WeightsAndBiasUpdates backPropagate(vector<double   > input, vector<double   > y);
+    vector<double   > feedForward(vector<double   > input);
+    vector<double   > feedForwardWithSave(vector<double   > input, vector<vector<double   > > * zvecsCont, vector<vector<double   > > * activationCont);
     NeuralNetwork(int neurons[], int numLayers);
-    vector<number<cpp_dec_float<300> >   > oneDimVectorMultiply(vector<number<cpp_dec_float<300> >   > src, vector<number<cpp_dec_float<300> >   > dest);
-    vector<number<cpp_dec_float<300> >   > hadamardProduct(vector<number<cpp_dec_float<300> >   > a, vector<number<cpp_dec_float<300> >   > b);
-    vector<number<cpp_dec_float<300> >   > sigmoidDeriv(vector<number<cpp_dec_float<300> >   > activation);
-    vector<number<cpp_dec_float<300> >   > costDerivative(vector<number<cpp_dec_float<300> >   > activation, vector<number<cpp_dec_float<300> >   > expected);
+    vector<double   > oneDimVectorMultiply(vector<double   > src, vector<double   > dest);
+    vector<double   > hadamardProduct(vector<double   > a, vector<double   > b);
+    vector<double   > sigmoidDeriv(vector<double   > activation);
+    vector<double   > costDerivative(vector<double   > activation, vector<double   > expected);
     void applyUpdates(WeightsAndBiasUpdates *updates);
     void printNetwork();
     virtual ~NeuralNetwork();

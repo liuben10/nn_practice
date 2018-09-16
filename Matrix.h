@@ -19,29 +19,29 @@ namespace sigmoid {
 
 class Matrix {
 public:
-	static vector<number<cpp_dec_float<300> >    > hadamard(vector<number<cpp_dec_float<300> >   > a, vector<number<cpp_dec_float<300> >   > b) {
-		vector<number<cpp_dec_float<300> >   > result = vector<number<cpp_dec_float<300> >   >(a.size(), 0);
+	static vector<double    > hadamard(vector<double   > a, vector<double   > b) {
+		vector<double   > result = vector<double   >(a.size(), 0);
 		for(int i = 0; i < a.size(); i++) {
 			result[i] = a[i] * b[i];
 		}
 		return result;
 	}
 
-	static vector<number<cpp_dec_float<300> >   > sum(vector<number<cpp_dec_float<300> >   > a, vector<number<cpp_dec_float<300> >   > b) {
-		vector<number<cpp_dec_float<300> >   > result = vector<number<cpp_dec_float<300> >   >(a.size(), 0);
+	static vector<double   > sum(vector<double   > a, vector<double   > b) {
+		vector<double   > result = vector<double   >(a.size(), 0);
 		for(int i = 0; i < a.size(); i++) {
 			result[i] = a[i] * b[i];
 		}
 		return result;
 	}
 
-	static vector<vector<number<cpp_dec_float<300> >   > > transpose(vector<vector<number<cpp_dec_float<300> >   > > toTranspose) {
+	static vector<vector<double   > > transpose(vector<vector<double   > > toTranspose) {
 		int rows = toTranspose.size();
 		int cols = toTranspose[0].size();
 
-		vector<vector<number<cpp_dec_float<300> >   > > resultTranspose = vector<vector<number<cpp_dec_float<300> >   > >();
+		vector<vector<double   > > resultTranspose = vector<vector<double   > >();
 		for(int i = 0 ; i < cols; i++) {
-			vector<number<cpp_dec_float<300> >   > curRow = vector<number<cpp_dec_float<300> >   >();
+			vector<double   > curRow = vector<double   >();
 			for(int j = 0; j < rows; j++) {
 				curRow.push_back(toTranspose[rows][cols]);
 			}
@@ -50,14 +50,14 @@ public:
 		return resultTranspose;
 	}
 
-	static vector<number<cpp_dec_float<300> >   > transposeAndMultiplyOneDim(vector<vector<number<cpp_dec_float<300> >   > > a, vector<number<cpp_dec_float<300> >   > b) {
+	static vector<double   > transposeAndMultiplyOneDim(vector<vector<double   > > a, vector<double   > b) {
 		int m1 = a.size();
 		int n1 = a[0].size();
 		printf("\na_size=%d a_row_size=%d, b_size=%d\n", a.size(), n1, b.size());
-		vector<number<cpp_dec_float<300> >   > result = vector<number<cpp_dec_float<300> >   >(m1, 0);
+		vector<double   > result = vector<double   >(m1, 0);
 		for(int i = 0; i < m1; i++) {
 			for(int j = 0; j < n1; j++) {
-				number<cpp_dec_float<300> >    prod = a[i][j] * b[j];
+				double    prod = a[i][j] * b[j];
 //				printf("\nproduct=%f of a=%f, b=%f\n", prod, a[i][j], b[j]);
 				result[i] += prod;
 			}
@@ -65,10 +65,10 @@ public:
 		return result;
 	}
 
-	static vector<vector<number<cpp_dec_float<300> >   > > transposeAndMultiply(vector<number<cpp_dec_float<300> >   > a, vector<number<cpp_dec_float<300> >   > b) {
+	static vector<vector<double   > > transposeAndMultiply(vector<double   > a, vector<double   > b) {
 		int m1 = a.size();
 		int n2 = b.size();
-		vector<vector<number<cpp_dec_float<300> >   > > result = vector<vector<number<cpp_dec_float<300> >   > >(m1, vector<number<cpp_dec_float<300> >   >(n2, 0));
+		vector<vector<double   > > result = vector<vector<double   > >(m1, vector<double   >(n2, 0));
 		for(int i = 0; i < m1; i++) {
 			for(int k = 0; k < n2; k++) {
 				result[i][k] += a[i] * b[k];
@@ -77,11 +77,11 @@ public:
 		return result;
 	}
 
-	static vector<vector<number<cpp_dec_float<300> >   > > matrixMultiply(vector<vector<number<cpp_dec_float<300> >   > > a, vector<vector<number<cpp_dec_float<300> >   > > b) {
+	static vector<vector<double   > > matrixMultiply(vector<vector<double   > > a, vector<vector<double   > > b) {
 		int m1 = a.size();
 		int n1 = a[0].size();
 		int n2 = b[0].size();
-		vector<vector<number<cpp_dec_float<300> >   > > result = vector<vector<number<cpp_dec_float<300> >   > >(m1, vector<number<cpp_dec_float<300> >   >(n2, 0));
+		vector<vector<double   > > result = vector<vector<double   > >(m1, vector<double   >(n2, 0));
 		for(int i = 0; i < m1; i++) {
 			for(int j = 0; j < n1; j++) {
 				for(int k = 0; k < n2; k++) {

@@ -5,8 +5,6 @@
  *      Author: liuben10
  */
 
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
 #include "NeuralNetwork.h"
 #include "Util.h"
 #include "Matrix.h"
@@ -31,22 +29,24 @@ namespace sigmoid {
   }
 
   void NeuralNetwork::printNetwork() {
+    cout << "==============NeuralNetwor===========" << "\n";
     for(int i = 0; i < layers.size(); i++) {
       SigmoidLayer *sl = this->layers[i];
       cout << sl->toString() << "\n";
     }
+    cout << "====================================" << "\n";
   }
 
   
-  vector<number<cpp_dec_float<300> >   > NeuralNetwork::hadamardProduct(vector<number<cpp_dec_float<300> >   > a, vector<number<cpp_dec_float<300> >   > b) {
-    vector<number<cpp_dec_float<300> >   > result(a.begin(), a.end());
+  vector<double   > NeuralNetwork::hadamardProduct(vector<double   > a, vector<double   > b) {
+    vector<double   > result(a.begin(), a.end());
     for(int i = 0; i < a.size(); i++) {
       result[i] *=  b[i];
     }
     return result;
   }
 
-  void printCol(vector<number<cpp_dec_float<300> >   > * col, string label) {
+  void printCol(vector<double   > * col, string label) {
     cout << "\n==" << label << "_col" << "===\n";
     for(int i = 0; i < col->size(); i++) {
       cout << label << "=" << col->at(i) << ", ";
@@ -54,7 +54,7 @@ namespace sigmoid {
     cout << "\n=====\n";
   }
 
-  void printMatrix(vector<vector<number<cpp_dec_float<300> >   > > * matrix, string label) {
+  void printMatrix(vector<vector<double   > > * matrix, string label) {
     cout << "\n==" << label << "_matrix" << "===\n";
     for(int i = 0; i < matrix->size(); i++) {
       for(int j = 0; j < matrix->at(i).size(); j++) {
@@ -72,31 +72,31 @@ namespace sigmoid {
     }
   }
 
-  WeightsAndBiasUpdates NeuralNetwork::backPropagate(vector<number<cpp_dec_float<300> >   > input, vector<number<cpp_dec_float<300> >   > expected) {
+  WeightsAndBiasUpdates NeuralNetwork::backPropagate(vector<double   > input, vector<double   > expected) {
     for(int i = 0; i < layers.size(); i++) {
       SigmoidLayer *sl = this->layers[i];
       cout << sl->toString() << "\n";
     }
-    vector<vector<number<cpp_dec_float<300> >   > > * activations = new vector<vector<number<cpp_dec_float<300> >   > >();
-    vector<vector<number<cpp_dec_float<300> >   > > * zvectors = new vector<vector<number<cpp_dec_float<300> >   > >();
+    vector<vector<double   > > * activations = new vector<vector<double   > >();
+    vector<vector<double   > > * zvectors = new vector<vector<double   > >();
     this->feedForwardWithSave(input, zvectors, activations);
     printMatrix(activations, "activation");
     printMatrix(zvectors, "zscore");
     
-    vector<number<cpp_dec_float<300> >   > activation = activations->at(activations->size() - 1);
-    vector<number<cpp_dec_float<300> >   > zvector = zvectors->at(zvectors->size()-1);
-    vector<number<cpp_dec_float<300> >   > costDerivative = this->costDerivative(activation, expected);
+    vector<double   > activation = activations->at(activations->size() - 1);
+    vector<double   > zvector = zvectors->at(zvectors->size()-1);
+    vector<double   > costDerivative = this->costDerivative(activation, expected);
     printCol(&costDerivative, "firstCostDerivative");
-    vector<number<cpp_dec_float<300> >   > sigmoidPrime = this->sigmoidDeriv(zvector);
+    vector<double   > sigmoidPrime = this->sigmoidDeriv(zvector);
     printCol(&sigmoidPrime, "firstSigmoidPrime");
     
-    vector<number<cpp_dec_float<300> >   > delta = this->hadamardProduct(costDerivative, sigmoidPrime);
+    vector<double   > delta = this->hadamardProduct(costDerivative, sigmoidPrime);
 
     printCol(&delta, "delta");
 
     WeightsAndBiasUpdates updates = WeightsAndBiasUpdates();
-    vector<number<cpp_dec_float<300> >   > biasUpdate = delta;
-    vector<vector<number<cpp_dec_float<300> >   > > weightUpdate = Matrix::transposeAndMultiply(activations->at(activations->size() - 2), delta);
+    vector<double   > biasUpdate = delta;
+    vector<vector<double   > > weightUpdate = Matrix::transposeAndMultiply(activations->at(activations->size() - 2), delta);
 
     printMatrix(&weightUpdate, "newWeightUpdate");
 
@@ -108,11 +108,11 @@ namespace sigmoid {
 
     for(int i = layers; i >= 0; i--) {
       printf("\n=====iter: %d=======\n", i);
-      vector<number<cpp_dec_float<300> >   > zvector = zvectors->at(i);
+      vector<double   > zvector = zvectors->at(i);
 
       SigmoidLayer *outputLayer =  this->layers[i+1];
-      vector<vector<number<cpp_dec_float<300> >   > > prevWeights = outputLayer->getWeights();
-      vector<number<cpp_dec_float<300> >   > sp = this->sigmoidDeriv(zvector);
+      vector<vector<double   > > prevWeights = outputLayer->getWeights();
+      vector<double   > sp = this->sigmoidDeriv(zvector);
 
       printCol(&sp, "sigmoid_prime");
 
@@ -152,42 +152,42 @@ namespace sigmoid {
     return updates;
   }
 
-  vector<number<cpp_dec_float<300> >   > NeuralNetwork::sigmoidDeriv(vector<number<cpp_dec_float<300> >   > zvector) {
-    vector<number<cpp_dec_float<300> >   > sigPrime = vector<number<cpp_dec_float<300> >   >(zvector.begin(), zvector.end());
+  vector<double   > NeuralNetwork::sigmoidDeriv(vector<double   > zvector) {
+    vector<double   > sigPrime = vector<double   >(zvector.begin(), zvector.end());
     for(int i = 0; i < zvector.size(); i++) {
       sigPrime[i] = SigmoidLayer::derivSigmoid(zvector[i]);
     }
     return sigPrime;
   }
 
-  vector<number<cpp_dec_float<300> >   > NeuralNetwork::oneDimVectorMultiply(vector<number<cpp_dec_float<300> >   > activation, vector<number<cpp_dec_float<300> >   > expected) {
-    vector<number<cpp_dec_float<300> >   > result = vector<number<cpp_dec_float<300> >   >();
+  vector<double   > NeuralNetwork::oneDimVectorMultiply(vector<double   > activation, vector<double   > expected) {
+    vector<double   > result = vector<double   >();
     for(int i = 0; i < activation.size(); i++) {
-      number<cpp_dec_float<300> >    curAct = activation[i];
-      number<cpp_dec_float<300> >    curExp = expected[i];
-      number<cpp_dec_float<300> >    product = curAct*curExp;
+      double    curAct = activation[i];
+      double    curExp = expected[i];
+      double    product = curAct*curExp;
       result.push_back(product);
     }
     return result;
   }
 
-  vector<number<cpp_dec_float<300> >   > NeuralNetwork::costDerivative(vector<number<cpp_dec_float<300> >   > activation, vector<number<cpp_dec_float<300> >   > expected) {
-    vector<number<cpp_dec_float<300> >   > delta = vector<number<cpp_dec_float<300> >   >(activation.begin(), activation.end());
+  vector<double   > NeuralNetwork::costDerivative(vector<double   > activation, vector<double   > expected) {
+    vector<double   > delta = vector<double   >(activation.begin(), activation.end());
     for(int i = 0; i < activation.size(); i++) {
       delta[i] = 2 * (activation[i] - expected[i]);
     }
     return delta;
   }
 
-  vector<number<cpp_dec_float<300> >   > NeuralNetwork::feedForwardWithSave(vector<number<cpp_dec_float<300> >   > input, vector<vector<number<cpp_dec_float<300> >   > > * zvecsCont, vector<vector<number<cpp_dec_float<300> >   > > * activationCont) {
-    vector<number<cpp_dec_float<300> >   > lastResult = input;
+  vector<double   > NeuralNetwork::feedForwardWithSave(vector<double   > input, vector<vector<double   > > * zvecsCont, vector<vector<double   > > * activationCont) {
+    vector<double   > lastResult = input;
     for(int i = 0; i < this->layers.size(); i++) {
       SigmoidLayer *currentLayer = this->layers[i];
 
-      vector<number<cpp_dec_float<300> >   > zvector = currentLayer->dotAndBiased(lastResult);
+      vector<double   > zvector = currentLayer->dotAndBiased(lastResult);
       zvecsCont->push_back(zvector);
 
-      vector<number<cpp_dec_float<300> >   > activation = currentLayer->activations(zvector);
+      vector<double   > activation = currentLayer->activations(zvector);
       activationCont->push_back(activation);
 
       printCol(&activation, "activation");
@@ -203,14 +203,14 @@ namespace sigmoid {
     return lastResult;
   }
 
-  vector<number<cpp_dec_float<300> >   > NeuralNetwork::feedForward(vector<number<cpp_dec_float<300> >   > input) {
-    vector<number<cpp_dec_float<300> >   > lastResult = vector<number<cpp_dec_float<300> >   >();
+  vector<double   > NeuralNetwork::feedForward(vector<double   > input) {
+    vector<double   > lastResult = vector<double   >();
     for(int i = 0; i < this->layers.size(); i++) {
       SigmoidLayer *currentLayer = this->layers[i];
 
-      vector<number<cpp_dec_float<300> >   > zvector = currentLayer->dotAndBiased(lastResult);
+      vector<double   > zvector = currentLayer->dotAndBiased(lastResult);
 
-      vector<number<cpp_dec_float<300> >   > activation = currentLayer->activations(zvector);
+      vector<double   > activation = currentLayer->activations(zvector);
 
       printf("single layer size: %d\n", activation.size());
       for(int j = 0; j < activation.size(); j++) {

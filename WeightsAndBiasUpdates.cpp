@@ -15,24 +15,24 @@ using namespace boost::multiprecision;
 
 namespace sigmoid {
 
-  void WeightsAndBiasUpdates::addWeightUpdate(vector<vector<number<cpp_dec_float<300> >   > > weightUpdate) {
+  void WeightsAndBiasUpdates::addWeightUpdate(vector<vector<double   > > weightUpdate) {
     this->weightUpdates.push_back(weightUpdate);
   }
-  void WeightsAndBiasUpdates::addBiasUpdate(vector<number<cpp_dec_float<300> >   > biasUpdate) {
+  void WeightsAndBiasUpdates::addBiasUpdate(vector<double   > biasUpdate) {
     this->biasUpdates.push_back(biasUpdate);
   }
 
-  vector<vector<number<cpp_dec_float<300> >   > > WeightsAndBiasUpdates::weightAt(int idx) {
+  vector<vector<double   > > WeightsAndBiasUpdates::weightAt(int idx) {
     return this->weightUpdates[idx];
   }
 
-  vector<number<cpp_dec_float<300> >   > WeightsAndBiasUpdates::biasAt(int idx) {
+  vector<double   > WeightsAndBiasUpdates::biasAt(int idx) {
     return this->biasUpdates[idx];
   }
 
   WeightsAndBiasUpdates::WeightsAndBiasUpdates() {
-    this->weightUpdates = vector<vector<vector<number<cpp_dec_float<300> >   > > >();
-    this->biasUpdates = vector<vector<number<cpp_dec_float<300> >   > >();
+    this->weightUpdates = vector<vector<vector<double   > > >();
+    this->biasUpdates = vector<vector<double   > >();
   }
 
   WeightsAndBiasUpdates::~WeightsAndBiasUpdates() {
@@ -46,7 +46,7 @@ namespace sigmoid {
     for(int i = 0; i < this->weightUpdates.size(); i++) {
       for(int j = 0; j < this->weightUpdates[i].size(); j++) {
 	for(int k = 0; k < this->weightUpdates[i][j].size(); k++) {
-	  number<cpp_dec_float<300> >    elem = this->weightUpdates[i][j][k];
+	  double    elem = this->weightUpdates[i][j][k];
 	  o << elem << ", ";
 	}
 	o << "\n";

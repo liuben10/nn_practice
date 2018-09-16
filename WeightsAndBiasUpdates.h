@@ -18,13 +18,13 @@ namespace sigmoid {
 
   class WeightsAndBiasUpdates {
   private:
-    vector<vector<vector<number<cpp_dec_float<300> >   > > > weightUpdates;
-    vector<vector<number<cpp_dec_float<300> >   > > biasUpdates;
+    vector<vector<vector<double   > > > weightUpdates;
+    vector<vector<double   > > biasUpdates;
   public:
-    void addWeightUpdate(vector<vector<number<cpp_dec_float<300> >   > > weightUpdate);
-    void addBiasUpdate(vector<number<cpp_dec_float<300> >   > biasUpdate);
-    vector<vector<number<cpp_dec_float<300> >   > > weightAt(int idx);
-    vector<number<cpp_dec_float<300> >   > biasAt(int idx);
+    void addWeightUpdate(vector<vector<double   > > weightUpdate);
+    void addBiasUpdate(vector<double   > biasUpdate);
+    vector<vector<double   > > weightAt(int idx);
+    vector<double   > biasAt(int idx);
     WeightsAndBiasUpdates();
   
     string toString();
