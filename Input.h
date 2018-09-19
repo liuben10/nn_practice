@@ -17,19 +17,19 @@ namespace sigmoid {
 
 class Input {
 private:
-	double    weight;
+	double weight;
 	string id;
 public:
-	Input(string id, double    weight) {
+	Input(string id, double weight) {
 			this->weight = weight;
 			this->id = id;
 	}
 
-	void setWeight(double    weight) {
+	void setWeight(double weight) {
 		this->weight = weight;
 	}
 
-	double    getWeight() {
+	double getWeight() {
 		return this->weight;
 	}
 
@@ -41,7 +41,7 @@ public:
 		this->id = id;
 	}
 
-	double    product(double    value) {
+	double product(double value) {
 		return this->weight * value;
 	}
 

@@ -23,12 +23,12 @@ namespace sigmoid {
 class Neuron {
 private:
 	map<string, Input*> inputs;
-	double    bias;
+	double bias;
 public:
-	double    dotProduct(map<string, double   > inputs);
-	double    activation(map<string, double   > inputs);
-	double    sigmoid(double    val);
-	Neuron(map<string, Input*> inputs, double    bias);
+	double dotProduct(map<string, double> inputs);
+	double activation(map<string, double> inputs);
+	double sigmoid(double val);
+	Neuron(map<string, Input*> inputs, double bias);
 	virtual ~Neuron();
 };
 

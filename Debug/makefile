@@ -30,6 +30,9 @@ endif
 ifneq ($(strip $(C_DEPS)),)
 -include $(C_DEPS)
 endif
+ifneq ($(strip $(MATRIX_TEST_DEPS)),)
+-include $(MATRIX_TEST_DEPS)
+endif
 endif
 
 -include ../makefile.defs
@@ -53,7 +56,11 @@ clean:
 	-@echo ' '
 
 BoostTest:
-	clang++ -std=c++11 -I ../../Libraries/boost_1_67_0 ../boost_test.cpp -o "boost_test"
+	clang++ -std=c++11 ../boost_test.cpp -o "boost_test"
+
+MatrixTest: MatrixTest.o
+	@echo 'Running Matrix Tests'
+	clang++ -std=c++11 ../MatrixTest.cpp -o "matrix"
 
 .PHONY: all clean dependents
 

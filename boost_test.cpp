@@ -1,14 +1,13 @@
-#include <boost/lambda/lambda.hpp>
 #include <iostream>
 #include <iterator>
 #include <algorithm>
+#include <math.h>
 
+using namespace std;
 
 int main()
 {
-    using namespace boost::lambda;
-    typedef std::istream_iterator<int> in;
-
-    std::for_each(
-        in(std::cin), in(), std::cout << (_1 * 3) << " " );
+  double res = 1/(1 + exp(-.005));
+  double res2 = res + .001;
+  cout << res2 << "\n";
 }

@@ -21,21 +21,21 @@ namespace sigmoid {
   private:
     int inputLength;
     int layerLength;
-    vector<vector<double   > > weights;
-    vector<double   > biases;
+    vector<vector<double> > weights;
+    vector<double> biases;
   public:
-    void setWeights(vector<vector<double   > > weights);
-    void setWeight(double    newWeight, int row, int col);
-    void setBiases(vector<double   > biases);
-    void setBias(double    newBias, int neuron);
-    void applyWeight(vector<vector<double   > > deltaW);
-    void applyBiases(vector<double   > deltaB);
-    vector<vector<double   > > getWeights();
-    vector<double   > getBiases();
-    static double    sigmoid(double    input);
-    static double    derivSigmoid(double    input);
-    vector<double   > dotAndBiased(vector<double   > inputs);
-    vector<double   > activations(vector<double   > z);
+    void setWeights(vector<vector<double> > weights);
+    void setWeight(double newWeight, int row, int col);
+    void setBiases(vector<double> biases);
+    void setBias(double newBias, int neuron);
+    void applyWeight(vector<vector<double> > deltaW);
+    void applyBiases(vector<double> deltaB);
+    vector<vector<double> > getWeights();
+    vector<double> getBiases();
+    static double sigmoid(double input);
+    static double derivSigmoid(double input);
+    vector<double> dotAndBiased(vector<double> inputs);
+    vector<double> activations(vector<double> z);
     SigmoidLayer(int inputLength, int outputLength);
     string weightString();
     string biasString();

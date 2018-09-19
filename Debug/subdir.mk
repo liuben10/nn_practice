@@ -28,7 +28,16 @@ CPP_DEPS += \
 ./Neuron.d \
 ./SigmoidLayer.d \
 ./Util.d \
-./WeightsAndBiasUpdates.d 
+./WeightsAndBiasUpdates.d
+
+MATRIX_TEST_SRCS += \
+../MatrixTest.cpp
+
+MATRIX_TEST_OBJS += \
+../MatrixTest.o
+
+MATRIX_TEST_DEPS += \
+../MatrixTest.d
 
 
 # Each subdirectory must supply rules for building sources it contributes
