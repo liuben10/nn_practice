@@ -5,10 +5,6 @@
 using namespace std;
 using namespace sigmoid;
 
-#define MATRIX vector<vector<double>>
-
-#define ROW vector<double>
-
 MATRIX test_matrix(double seed) {
   MATRIX matrix = MATRIX();
 

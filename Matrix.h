@@ -15,6 +15,10 @@ using namespace std;
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
+#define MATRIX vector<vector<double>>
+
+#define ROW vector<double>
+
 //TODO FIX ME transpose is completely broken. That needs to be fixed.
 // I was way too baked looking at this code.
 
