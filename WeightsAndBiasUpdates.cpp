@@ -18,13 +18,11 @@ namespace sigmoid {
   void WeightsAndBiasUpdates::addWeightUpdate(MATRIX weightUpdate) {
     Matrix::printMatrixLabel(weightUpdate, "weight_update");
     this->weightUpdates.push_back(weightUpdate);
-    cout << "No segfault weight update" << "\n";
   }
   
   void WeightsAndBiasUpdates::addBiasUpdate(MATRIX biasUpdate) {
     Matrix::printMatrixLabel(biasUpdate, "bias_update");
     this->biasUpdates.push_back(biasUpdate);
-    cout << "No segfault bias update" << "\n";
   }
 
   MATRIX WeightsAndBiasUpdates::weightAt(int idx) {

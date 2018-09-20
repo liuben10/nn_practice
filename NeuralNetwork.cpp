@@ -28,7 +28,7 @@ namespace sigmoid {
     this->outputDim = outputDim;
     this->layers = vector<SigmoidLayer *>();
 
-    for(int i = 0; i < layers; i++) {
+    for(int i = 0; i < layers-1; i++) {
       SigmoidLayer *sl = new SigmoidLayer(neurons[i], neurons[i+1]);
       this->layers.push_back(sl);
     }
@@ -130,12 +130,12 @@ namespace sigmoid {
 
       printMatrix(&delta, "delta_after_transpose_and_multiply");
 
-      delta = Matrix::hadamard(delta, sp);
+      delta = Matrix::hadamard(Matrix::transpose(delta), sp);
 
       printMatrix(&delta, "delta_after_hadamard_product");
 
       biasUpdate = delta;
-      weightUpdate = Matrix::transposeAndMultiply(activations->at(i), delta);
+      weightUpdate = Matrix::matrixMultiply(Matrix::transpose(delta), activations->at(i));
       Matrix::printMatrixLabel(weightUpdate, "weight_update");
       Matrix::printMatrixLabel(biasUpdate, "bias_update");
       
@@ -185,7 +185,7 @@ namespace sigmoid {
       
       lastResult =  activation;
       for(int j = 0; j < lastResult.size(); j++) {
-	cout << "lastRes=" << lastResult[j][0] << "\n";
+    	cout << "lastRes=" << lastResult[j][0] << "\n";
       }
 
       printf("\n=======finished(lastResult: %d)=======\n", lastResult.size());
@@ -204,7 +204,6 @@ namespace sigmoid {
 
       MATRIX activation = currentLayer->activations(zvector);
       printCol(&activation, "activation");
-      cout << "\n";
       lastResult = activation;
     }
     return lastResult;

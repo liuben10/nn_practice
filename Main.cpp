@@ -222,11 +222,7 @@ void checkSigmoidSafe() {
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
-    cout << "###########################################" << "\n";
-    cout << "###########################################" << "\n";
     cout << "ITERATION:  " << i << "\n";
-    cout << "###########################################" << "\n";
-    cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
@@ -244,8 +240,8 @@ void checkSigmoidSafe() {
     expected.push_back(ROW(1, 1));
     WeightsAndBiasUpdates wb = nn.backPropagate(input, expected);
     nn.applyUpdates(wb);
-    // cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
-    // nn.printNetwork();
+    cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
+    nn.printNetwork();
   }
   
   MATRIX input = MATRIX();

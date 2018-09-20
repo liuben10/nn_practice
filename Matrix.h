@@ -30,6 +30,8 @@ namespace sigmoid {
   public:
     static MATRIX hadamard(MATRIX a, MATRIX b) {
       MATRIX res(a);
+      Matrix::printMatrixLabel(b, "sp_hadamard");
+      Matrix::printMatrixLabel(a, "delta_hadamard");
       for(int i = 0; i < a.size(); i++) {
 	for(int j = 0; j < a[i].size(); j++) {
 	  res[i][j] *= b[i][j];
