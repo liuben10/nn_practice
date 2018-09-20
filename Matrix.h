@@ -62,6 +62,20 @@ namespace sigmoid {
       Matrix::printMatrixLabel(matrix, "matrix");
     }
 
+    static void printMatrixSmall(MATRIX matrix) {
+      Matrix::printMatrixSmallLabel(matrix, "matrix");
+    }
+
+    static void printMatrixSmallLabel(MATRIX matrix, string label) {
+      cout << Matrix::stringMatrixSmallLabel(matrix, label);
+    }
+
+    static string stringMatrixSmallLabel(MATRIX matrix, string label) {
+      ostringstream o;
+      o << label << "_dims=" << matrix.size() << "x" << matrix[0].size() << "\n";
+      return o.str();
+    }
+
     static void printMatrixLabel(MATRIX matrix, string label) {
       cout << stringMatrixLabel(matrix, label);
     }
@@ -94,9 +108,7 @@ namespace sigmoid {
       output << "\n";
       return output.str();
     }
-    
 				  
-
     static MATRIX transpose(MATRIX toTranspose) {
       int rows = toTranspose.size();
       int cols = toTranspose[0].size();
@@ -118,8 +130,8 @@ namespace sigmoid {
     }
 
     static MATRIX matrixMultiply(MATRIX a, MATRIX b) {
-      Matrix::printMatrix(a);
-      Matrix::printMatrix(b);
+      Matrix::printMatrixSmall(a);
+      Matrix::printMatrixSmall(b);
       int arows = a.size();
       int acols = a[0].size();
       int bcols = b[0].size();

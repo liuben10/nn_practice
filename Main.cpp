@@ -168,10 +168,10 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
       double cur = dataset[ind][i*28 + j];
       if(dataset[ind][i*28+j] > 80) {
 	cout << 1;
-	result.getValues()->push_back(vector<double>(1, cur));
+	result.getValues()->at(i*28 + j) = vector<double>(1, cur);
       } else {
 	cout << 0;
-	result.getValues()->push_back(vector<double>(1, cur));
+	result.getValues()->at(i*28 + j) = vector<double>(1, cur);
       }
     }
     cout << "" << endl;
@@ -218,7 +218,7 @@ void checkSigmoidSafe() {
   int numLayers = 3;
   int neurons[3] = {2, 2, 1};
   NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
-  for(int i = 0; i < 5; i++) {
+  for(int i = 0; i < 100; i++) {
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
@@ -274,21 +274,22 @@ void checkMain() {
   int sigmoidLayers[4] = {784, 16, 16, 10};
   NeuralNetwork network = NeuralNetwork(sigmoidLayers, numLayers);
 
-  for(int k = 0; k < 5; k++) {
-    Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+  // for(int k = 0; k < 5; k++) {
+  //   cout << "Training :" << k << "\n";
+  //   Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
-    //       ROW output = network.feedForward(input->getValues());
+  //   //       ROW output = network.feedForward(input->getValues());
 
-    MATRIX expectedBin = Coster::toBinary(input.getExpected());
+  //   MATRIX expectedBin = Coster::toBinary(input.getExpected());
 
-    WeightsAndBiasUpdates updates = network.backPropagate(*(input.getValues()), expectedBin);
+  //   WeightsAndBiasUpdates updates = network.backPropagate(*(input.getValues()), expectedBin);
 
-    std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
+  //   std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
 
-    network.applyUpdates(updates);
+  //   network.applyUpdates(updates);
 
-    //        printf("\n\n == k: %d == \n\n", k);
-  }
+  //   //        printf("\n\n == k: %d == \n\n", k);
+  // }
 
   Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
   
@@ -317,8 +318,8 @@ void checkSigmoidRand() {
 int main()
 {
   // checkSigmoidRand();
-  //  checkMain();
-  checkSigmoidSafe();
+  checkMain();
+  //  checkSigmoidSafe();
   return 0;
 }
 

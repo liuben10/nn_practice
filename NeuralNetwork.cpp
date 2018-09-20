@@ -31,8 +31,12 @@ namespace sigmoid {
     for(int i = 0; i < layers-1; i++) {
       SigmoidLayer *sl = new SigmoidLayer(neurons[i], neurons[i+1]);
       this->layers.push_back(sl);
+      cout << "layer=" << i << ", weights=" << sl->getWeights().size() << ", " << sl->getWeights()[0].size() 
+	   << ", biases=" << sl->getBiases().size() << ", " << sl->getBiases()[0].size()
+	   << "\n";
     }
-    this->printNetwork();
+    // this->printNetwork();
+    
   }
 
   void NeuralNetwork::printNetwork() {
@@ -44,30 +48,14 @@ namespace sigmoid {
     cout << "====================================" << "\n";
   }
 
-  void printCol(MATRIX *col, string label) {
-    checkIsColumnVector(*col, label);
-    cout << "\n==" << label << "_col" << "===\n";
-    for(int i = 0; i < col->size(); i++) {
-      cout << label << "=" << col->at(i)[0] << ", ";
-    }
-    cout << "\n=====\n";
-  }
-
-  void printMatrix(MATRIX * matrix, string label) {
-    cout << "\n==" << label << "_matrix" << "===\n";
-    for(int i = 0; i < matrix->size(); i++) {
-      for(int j = 0; j < matrix->at(i).size(); j++) {
-	cout << label << "=" << matrix->at(i).at(j) << ", ";
-      }
-      cout << "\n";
-    }
-  }
-
   void NeuralNetwork::applyUpdates(WeightsAndBiasUpdates weightAndBiasUpdates) {
+    cout << "weightUpdateSize=" <<  weightAndBiasUpdates.getWeightUpdates().size() << "\n";
     if (weightAndBiasUpdates.getWeightUpdates().size() != this->layers.size()) {
+      cerr << "ERROR weight update size doesn't match" << "\n";
       throw "ERROR weight update size doesn't match";
     }
     if (weightAndBiasUpdates.getBiasUpdates().size() != this->layers.size()) {
+      cerr << "ERROR bias update size doesn't match" << "\n";
       throw "ERROR bias update size doesn't match";
     }
     for(int i = this->layers.size() - 1; i >= 0; i--) {
@@ -86,25 +74,25 @@ namespace sigmoid {
     cout << "\n\n\n======REMOVE=======\n\n\n" << "\n";
     for(int i = 0; i< activations->size(); i++) {
       cout << "\ni=" << i << "\n";
-      Matrix::printMatrixLabel(activations->at(i), "activation");
-      Matrix::printMatrixLabel(zvectors->at(i), "zvectors");
+      Matrix::Matrix::printMatrixLabel(activations->at(i), "activation");
+      Matrix::Matrix::printMatrixLabel(zvectors->at(i), "zvectors");
     }
     
     MATRIX activation = activations->at(activations->size() - 1);
     MATRIX zvector = zvectors->at(zvectors->size()-1);
     MATRIX costDerivative = this->costDerivative(activation, expected);
-    printMatrix(&costDerivative, "firstCostDerivative");
+    Matrix::printMatrixSmallLabel(costDerivative, "firstCostDerivative");
     MATRIX sigmoidPrime = this->sigmoidDeriv(zvector);
-    printMatrix(&sigmoidPrime, "firstSigmoidPrime");
+    Matrix::printMatrixSmallLabel(sigmoidPrime, "firstSigmoidPrime");
     
     MATRIX delta = Matrix::hadamard(costDerivative, sigmoidPrime);
 
-    printCol(&delta, "delta");
+    Matrix::printMatrixSmallLabel(delta, "delta");
 
     WeightsAndBiasUpdates updates = WeightsAndBiasUpdates();
     MATRIX biasUpdate = delta;
-    MATRIX weightUpdate = Matrix::transposeAndMultiply(delta, activations->at(activations->size() - 2));
-    printMatrix(&weightUpdate, "newWeightUpdate");
+    MATRIX weightUpdate = Matrix::matrixMultiply(activations->at(activations->size() - 2), Matrix::transpose(delta));
+    Matrix::printMatrixSmallLabel(weightUpdate, "newWeightUpdate");
 
     updates.addBiasUpdate(biasUpdate);
     updates.addWeightUpdate(weightUpdate);
@@ -120,28 +108,27 @@ namespace sigmoid {
       MATRIX prevWeights = outputLayer->getWeights();
       MATRIX sp = this->sigmoidDeriv(zvector);
 
-      printCol(&sp, "sigmoid_prime");
+      Matrix::printMatrixSmallLabel(sp, "sigmoid_prime");
 
-      printCol(&delta, "prev_delta");
+      Matrix::printMatrixSmallLabel(delta, "prev_delta");
 
-      printMatrix(&prevWeights, "prev_weights");
+      Matrix::printMatrixSmallLabel(prevWeights, "prev_weights");
 
       delta = Matrix::matrixMultiply(delta, prevWeights);
 
-      printMatrix(&delta, "delta_after_transpose_and_multiply");
+      Matrix::printMatrixSmallLabel(delta, "delta_after_transpose_and_multiply");
 
       delta = Matrix::hadamard(Matrix::transpose(delta), sp);
 
-      printMatrix(&delta, "delta_after_hadamard_product");
+      Matrix::printMatrixSmallLabel(delta, "delta_after_hadamard_product");
 
       biasUpdate = delta;
-      weightUpdate = Matrix::matrixMultiply(Matrix::transpose(delta), activations->at(i));
+      weightUpdate = Matrix::matrixMultiply(activations->at(i), Matrix::transpose(delta));
       Matrix::printMatrixLabel(weightUpdate, "weight_update");
       Matrix::printMatrixLabel(biasUpdate, "bias_update");
       
       updates.addBiasUpdate(biasUpdate);
       updates.addWeightUpdate(weightUpdate);
-
 
       printf("\n====\n");
     }
@@ -181,7 +168,7 @@ namespace sigmoid {
       MATRIX activation = currentLayer->activations(zvector);
       activationCont->push_back(activation);
 
-      printCol(&activation, "activation");
+      Matrix::printMatrixSmallLabel(activation, "activation");
       
       lastResult =  activation;
       for(int j = 0; j < lastResult.size(); j++) {
@@ -194,16 +181,16 @@ namespace sigmoid {
     return lastResult;
   }
 
-  MATRIX NeuralNetwork::feedForward(MATRIX input) {
-    
+  MATRIX NeuralNetwork::feedForward(MATRIX input) {   
     MATRIX lastResult = MATRIX(input);
+    // Matrix::printMatrix(lastResult);
     for(int i = 0; i < this->layers.size(); i++) {
+      cout << "i=" << i << "\n";
       SigmoidLayer *currentLayer = this->layers[i];
 
       MATRIX zvector = currentLayer->dotAndBiased(lastResult);
 
       MATRIX activation = currentLayer->activations(zvector);
-      printCol(&activation, "activation");
       lastResult = activation;
     }
     return lastResult;

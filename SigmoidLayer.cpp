@@ -38,8 +38,8 @@ namespace sigmoid {
   }
 
   void SigmoidLayer::applyWeight(MATRIX deltaW) {
-    Matrix::printMatrixLabel(deltaW, "deltaW");
-    Matrix::printMatrixLabel(this->weights, "weights");
+    Matrix::printMatrixSmallLabel(deltaW, "deltaW");
+    Matrix::printMatrixSmallLabel(this->weights, "weights");
     for(int i = 0; i < this->weights.size(); i++) {
       for(int j = 0; j < this->weights[0].size(); j++) {
 	this->weights[i][j] = this->weights[i][j] + deltaW[i][j];
@@ -78,9 +78,11 @@ namespace sigmoid {
   }
 
   MATRIX SigmoidLayer::dotAndBiased(MATRIX inputs) {
-    Matrix::printMatrix(inputs);
+    Matrix::printMatrixSmallLabel(inputs, "input");
     MATRIX wproduct = Matrix::matrixMultiply(this->weights, inputs);
-    return Matrix::sum(wproduct, this->biases);
+    MATRIX sum = Matrix::sum(wproduct, this->biases);
+    Matrix::printMatrixSmallLabel(sum, "sum");
+    return sum;
   }
 
   MATRIX SigmoidLayer::activations(MATRIX z) {

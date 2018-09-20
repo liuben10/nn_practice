@@ -15,14 +15,23 @@ using namespace boost::multiprecision;
 
 namespace sigmoid {
 
+  vector<MATRIX> push_front(vector<MATRIX> container, MATRIX update) {
+    vector<MATRIX> copy = vector<MATRIX>(container.size() + 1);
+    copy[0] = update;
+    for(int i = 0; i < container.size(); i++) {
+      copy[i+1] = container[i];
+    }
+    return copy;
+  }
+
   void WeightsAndBiasUpdates::addWeightUpdate(MATRIX weightUpdate) {
     Matrix::printMatrixLabel(weightUpdate, "weight_update");
-    this->weightUpdates.push_back(weightUpdate);
+    this->weightUpdates = push_front(this->weightUpdates, weightUpdate);
   }
   
   void WeightsAndBiasUpdates::addBiasUpdate(MATRIX biasUpdate) {
     Matrix::printMatrixLabel(biasUpdate, "bias_update");
-    this->biasUpdates.push_back(biasUpdate);
+    this->biasUpdates = push_front(this->biasUpdates, biasUpdate);
   }
 
   MATRIX WeightsAndBiasUpdates::weightAt(int idx) {
