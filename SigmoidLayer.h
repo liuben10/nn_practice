@@ -4,13 +4,12 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
-#include <boost/multiprecision/cpp_dec_float.hpp>
 
+#include "Matrix.h"
 #include <vector>
 #include <string>
 
 using namespace std;
-using namespace boost::multiprecision;
 
 #ifndef SIGMOIDLAYER_H_
 #define SIGMOIDLAYER_H_
@@ -21,21 +20,21 @@ namespace sigmoid {
   private:
     int inputLength;
     int layerLength;
-    vector<vector<double> > weights;
-    vector<double> biases;
+    MATRIX weights;
+    MATRIX biases;
   public:
-    void setWeights(vector<vector<double> > weights);
+    void setWeights(MATRIX weights);
     void setWeight(double newWeight, int row, int col);
-    void setBiases(vector<double> biases);
+    void setBiases(MATRIX biases);
     void setBias(double newBias, int neuron);
-    void applyWeight(vector<vector<double> > deltaW);
-    void applyBiases(vector<double> deltaB);
-    vector<vector<double> > getWeights();
-    vector<double> getBiases();
+    void applyWeight(MATRIX deltaW);
+    void applyBiases(MATRIX deltaB);
+    MATRIX getWeights();
+    MATRIX getBiases();
     static double sigmoid(double input);
     static double derivSigmoid(double input);
-    vector<double> dotAndBiased(vector<double> inputs);
-    vector<double> activations(vector<double> z);
+    MATRIX dotAndBiased(MATRIX inputs);
+    MATRIX activations(MATRIX z);
     SigmoidLayer(int inputLength, int outputLength);
     string weightString();
     string biasString();

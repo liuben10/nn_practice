@@ -7,7 +7,6 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include "WeightsAndBiasUpdates.h"
-#include "Matrix.h"
 #include <string>
 
 using namespace std;
@@ -16,24 +15,37 @@ using namespace boost::multiprecision;
 
 namespace sigmoid {
 
-  void WeightsAndBiasUpdates::addWeightUpdate(vector<vector<double> > weightUpdate) {
+  void WeightsAndBiasUpdates::addWeightUpdate(MATRIX weightUpdate) {
+    Matrix::printMatrixLabel(weightUpdate, "weight_update");
     this->weightUpdates.push_back(weightUpdate);
+    cout << "No segfault weight update" << "\n";
   }
-  void WeightsAndBiasUpdates::addBiasUpdate(vector<double> biasUpdate) {
+  
+  void WeightsAndBiasUpdates::addBiasUpdate(MATRIX biasUpdate) {
+    Matrix::printMatrixLabel(biasUpdate, "bias_update");
     this->biasUpdates.push_back(biasUpdate);
+    cout << "No segfault bias update" << "\n";
   }
 
-  vector<vector<double> > WeightsAndBiasUpdates::weightAt(int idx) {
+  MATRIX WeightsAndBiasUpdates::weightAt(int idx) {
     return this->weightUpdates[idx];
   }
 
-  vector<double> WeightsAndBiasUpdates::biasAt(int idx) {
+  MATRIX WeightsAndBiasUpdates::biasAt(int idx) {
     return this->biasUpdates[idx];
   }
 
+  vector<MATRIX> WeightsAndBiasUpdates::getWeightUpdates() {
+    return this->weightUpdates;
+  }
+
+  vector<MATRIX> WeightsAndBiasUpdates::getBiasUpdates() {
+    return this->biasUpdates;
+  }
+
   WeightsAndBiasUpdates::WeightsAndBiasUpdates() {
-    this->weightUpdates = vector<vector<vector<double> > >();
-    this->biasUpdates = vector<vector<double> >();
+    this->weightUpdates = vector<MATRIX>();
+    this->biasUpdates = vector<MATRIX>();
   }
 
   WeightsAndBiasUpdates::~WeightsAndBiasUpdates() {
@@ -43,12 +55,13 @@ namespace sigmoid {
 
   string WeightsAndBiasUpdates::toString() {
     ostringstream o;
+    cout << "WEIGHTANDBIASUPDATES" << "\n---\n";
     for(int i = 0; i < this->weightUpdates.size(); i++) {
       o << Matrix::stringMatrixLabel(this->weightUpdates[i], "WeightUpdate") << "\n==\n";
     }
 
     for(int i = 0; i < this->biasUpdates.size(); i++) {
-      o << Matrix::stringRowLabel(this->biasUpdates[i], "BiasUpdate") << "\n==\n";
+      o << Matrix::stringMatrixLabel(this->biasUpdates[i], "BiasUpdate") << "\n==\n";
     }
     o << "\n";
 

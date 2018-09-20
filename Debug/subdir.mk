@@ -10,7 +10,8 @@ CPP_SRCS += \
 ../Neuron.cpp \
 ../SigmoidLayer.cpp \
 ../Util.cpp \
-../WeightsAndBiasUpdates.cpp 
+../WeightsAndBiasUpdates.cpp
+
 
 OBJS += \
 ./Main.o \
@@ -19,7 +20,7 @@ OBJS += \
 ./Neuron.o \
 ./SigmoidLayer.o \
 ./Util.o \
-./WeightsAndBiasUpdates.o 
+./WeightsAndBiasUpdates.o
 
 CPP_DEPS += \
 ./Main.d \

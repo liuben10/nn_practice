@@ -40,13 +40,13 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Sigmoid
+all: NN
 
 # Tool invocations
-Sigmoid: $(OBJS) $(USER_OBJS)
+NN: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	clang++ -std=c++11 -o "Sigmoid" $(OBJS) $(USER_OBJS) $(LIBS) -w
+	clang++ -std=c++11 -o "Main" $(OBJS) $(USER_OBJS) $(LIBS) -w
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -61,6 +61,10 @@ BoostTest:
 MatrixTest: MatrixTest.o
 	@echo 'Running Matrix Tests'
 	clang++ -std=c++11 ../MatrixTest.cpp -o "matrix"
+
+SigmoidTest: SigmoidLayerTest.o SigmoidLayer.o
+	@echo 'Running SigmoidLayer Test'
+	clang++ -std=c++11 ../SigmoidLayerTest.cpp -o "sigtest"
 
 .PHONY: all clean dependents
 

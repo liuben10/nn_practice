@@ -21,17 +21,17 @@ typedef unsigned char uchar;
 class Wrapper {
 private:
   int expected;
-  vector<double> values;
+  MATRIX *values;
 public:
   int getExpected() {
     return this->expected;
   }
 
-  vector<double> getValues() {
+  MATRIX * getValues() {
     return this->values;
   }
 
-  Wrapper(int expected, vector<double> values) {
+  Wrapper(int expected,MATRIX *values) {
     this->expected = expected;
     this->values = values;
   }
@@ -157,9 +157,9 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
   cout << "" << endl;
 
   int expected = +labels[ind];
-  vector<double> * values = new vector<double>(784, 0);
+  MATRIX * values = new MATRIX(784, ROW(1, 0));
 
-  Wrapper result(expected, *values);
+  Wrapper result(expected, values);
 
   // 28 rows
   for(int i = 0; i < 28; i++) {
@@ -168,10 +168,10 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
       double cur = dataset[ind][i*28 + j];
       if(dataset[ind][i*28+j] > 80) {
 	cout << 1;
-	result.getValues().push_back(cur);
+	result.getValues()->push_back(vector<double>(1, cur));
       } else {
 	cout << 0;
-	result.getValues().push_back(cur);
+	result.getValues()->push_back(vector<double>(1, cur));
       }
     }
     cout << "" << endl;
@@ -181,38 +181,38 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
 }
 
 
-void checkSigmoid() {
-  SigmoidLayer * sl = new SigmoidLayer(10, 4);
-  vector<vector<double> > weights;
+// void checkSigmoid() {
+//   SigmoidLayer * sl = new SigmoidLayer(10, 4);
+//   MATRIX weights;
 
-  double firstRow[10] = {0, 10, 0, 10, 0, 10, 0, 10, 0, 10};
-  vector<double> firstRowVec(firstRow, firstRow + (sizeof(firstRow) / sizeof(firstRow[0])) );
-  weights.push_back(firstRowVec);
+//   double firstRow[10] = {0, 10, 0, 10, 0, 10, 0, 10, 0, 10};
+//   ROW firstRowVec(firstRow, firstRow + (sizeof(firstRow) / sizeof(firstRow[0])) );
+//   weights.push_back(firstRowVec);
 
-  double secondRow[10] = {0, 0, 10, 10, 0, 0, 10, 10, 0, 0};
-  vector<double> secondRowVec(secondRow, secondRow + (sizeof(secondRow) / sizeof(secondRow[0])) );
-  weights.push_back(secondRowVec);
+//   double secondRow[10] = {0, 0, 10, 10, 0, 0, 10, 10, 0, 0};
+//   ROW secondRowVec(secondRow, secondRow + (sizeof(secondRow) / sizeof(secondRow[0])) );
+//   weights.push_back(secondRowVec);
 
-  double thirdRow[10] = {0, 0, 0, 0, 10, 10, 10, 10, 0, 0};
-  vector<double> thirdRowVec(thirdRow, thirdRow + (sizeof(thirdRow) / sizeof(thirdRow[0])) );
-  weights.push_back(thirdRowVec);
+//   double thirdRow[10] = {0, 0, 0, 0, 10, 10, 10, 10, 0, 0};
+//   ROW thirdRowVec(thirdRow, thirdRow + (sizeof(thirdRow) / sizeof(thirdRow[0])) );
+//   weights.push_back(thirdRowVec);
 
-  double fourthRow[10] = {0, 0, 0, 0, 0, 0, 0, 0, 10, 10};
-  vector<double> fourthRowVec(fourthRow, fourthRow + (sizeof(fourthRow) / sizeof(fourthRow[0])) );
-  weights.push_back(fourthRowVec);
+//   double fourthRow[10] = {0, 0, 0, 0, 0, 0, 0, 0, 10, 10};
+//   ROW fourthRowVec(fourthRow, fourthRow + (sizeof(fourthRow) / sizeof(fourthRow[0])) );
+//   weights.push_back(fourthRowVec);
 
-  sl->setWeights(weights);
+//   sl->setWeights(weights);
 
-  double biases[4] = {-5, -5, -5, -5};
-  vector<double> biasVec(biases, biases + (sizeof(biases) / sizeof(biases[0])));
+//   double biases[4] = {-5, -5, -5, -5};
+//   MATRIX biasVec(biases, biases + (sizeof(biases) / sizeof(biases[0])));
 
-  sl->setBiases(biasVec);
+//   sl->setBiases(biasVec);
 
-  double inputs[10] = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-  vector<double> inputsVec(inputs, inputs + (sizeof(inputs) / sizeof(inputs[0])));
+//   double inputs[10] = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
+//   ROW inputsVec(inputs, inputs + (sizeof(inputs) / sizeof(inputs[0])));
 
-  vector<double> activations = sl->dotAndBiased(inputsVec);
-}
+//   ROW activations = sl->dotAndBiased(inputsVec);
+// }
 
 void checkSigmoidSafe() {
   int numLayers = 3;
@@ -232,26 +232,25 @@ void checkSigmoidSafe() {
     cout << "###########################################" << "\n";
 
     
-    vector<double> input = vector<double>();
-    input.push_back(0);
-    input.push_back(1);
+    MATRIX input = MATRIX(2, ROW(1, 0.0));
+    input[1] = ROW(1, 1);
 
-    vector<double> output = nn.feedForward(input);
+    MATRIX output = nn.feedForward(input);
     for(int i = 0; i < output.size(); i++) {
-      cout << "Checking Sigmoid Output=" << output[i] << "\n";
+      cout << "Checking Sigmoid Output=" << output[i][0] << "\n";
     }
 
-    vector<double> expected;
-    expected.push_back(1);
+    MATRIX expected;
+    expected.push_back(ROW(1, 1));
     WeightsAndBiasUpdates wb = nn.backPropagate(input, expected);
-    nn.applyUpdates(&wb);
-    cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
-    nn.printNetwork();
+    nn.applyUpdates(wb);
+    // cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
+    // nn.printNetwork();
   }
   
-  vector<double> input = vector<double>();
-  input.push_back(0);
-  input.push_back(1);
+  MATRIX input = MATRIX();
+  input.push_back(ROW(1, 0));
+  input.push_back(ROW(1, 1));
   nn.feedForward(input);
 }
 
@@ -282,27 +281,26 @@ void checkMain() {
   for(int k = 0; k < 5; k++) {
     Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
-    //        vector<double> output = network.feedForward(input->getValues());
+    //       ROW output = network.feedForward(input->getValues());
 
-    vector<double> expectedBin = Coster::toBinary(input.getExpected());
+    MATRIX expectedBin = Coster::toBinary(input.getExpected());
 
-    WeightsAndBiasUpdates updates = network.backPropagate(input.getValues(), expectedBin);
+    WeightsAndBiasUpdates updates = network.backPropagate(*(input.getValues()), expectedBin);
 
     std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
 
-    network.applyUpdates(&updates);
+    network.applyUpdates(updates);
 
     //        printf("\n\n == k: %d == \n\n", k);
   }
 
   Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
-
   
 
-  vector<double> output = network.feedForward(input.getValues());
+  MATRIX output = network.feedForward(*(input.getValues()));
 
   for(int i = 0; i < output.size(); i++) {
-    cout << output[i] << "\n";
+    cout << output[i][0] << "\n";
   }
 }
 
@@ -316,7 +314,7 @@ void checkSigmoidRand() {
   }
 
   for(int i = 0; i < s.getBiases().size(); i++) {
-    cout << "Sigmoid Rand=" << s.getBiases()[i] << "\n";
+    cout << "Sigmoid Rand=" << s.getBiases()[i][0] << "\n";
   }
 }
 
@@ -325,5 +323,6 @@ int main()
   // checkSigmoidRand();
   //  checkMain();
   checkSigmoidSafe();
+  return 0;
 }
 

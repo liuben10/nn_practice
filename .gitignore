@@ -1,5 +1,8 @@
 /Debug/*.o
 /Debug/*.d
 /Debug/Sigmoid
+/Debug/matrix
+/Debug/Main
+/Debug/sigtest
 /Libraries
 .settings

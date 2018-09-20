@@ -6,7 +6,6 @@
  */
 
 #include "SigmoidLayer.h"
-#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include "Matrix.h"
 #include <math.h>
@@ -16,15 +15,14 @@
 #include <string>
 
 using namespace std;
-using namespace boost::multiprecision;
 
 namespace sigmoid {
 
   SigmoidLayer::SigmoidLayer(int inputLength, int layerLength) {
     this->inputLength = inputLength;
     this->layerLength = layerLength;
-    this->weights = vector<vector<double> >(layerLength, vector<double>(inputLength, 0));
-    this->biases = vector<double>(layerLength, 0);
+    this->weights = MATRIX(layerLength, ROW(inputLength, 0));
+    this->biases = MATRIX(layerLength, ROW(1, 0));
     default_random_engine generator;
     normal_distribution<double> distribution(0, 0.2);
 
@@ -35,33 +33,35 @@ namespace sigmoid {
     }
 
     for(int i = 0; i < this->biases.size(); i++) {
-      this->biases[i] = distribution(generator);
+      this->biases[i][0] = distribution(generator);
     }
   }
 
-  void SigmoidLayer::applyWeight(vector<vector<double> > deltaW) {
+  void SigmoidLayer::applyWeight(MATRIX deltaW) {
+    Matrix::printMatrixLabel(deltaW, "deltaW");
+    Matrix::printMatrixLabel(this->weights, "weights");
     for(int i = 0; i < this->weights.size(); i++) {
-      for(int j = 0; j < this->weights[i].size(); j++) {
+      for(int j = 0; j < this->weights[0].size(); j++) {
 	this->weights[i][j] = this->weights[i][j] + deltaW[i][j];
       }
     }
   }
   
-  void SigmoidLayer::applyBiases(vector<double> deltaB) {
+  void SigmoidLayer::applyBiases(MATRIX deltaB) {
     for(int i = 0; i < this->biases.size(); i++) {
-      this->biases[i] = this->biases[i] + deltaB[i];
+      this->biases[i][0] = this->biases[i][0] + deltaB[i][0];
     }
   }
 
-  vector<double> SigmoidLayer::getBiases() {
+  MATRIX SigmoidLayer::getBiases() {
     return this->biases;
   }
 
-  vector<vector<double> > SigmoidLayer::getWeights() {
+  MATRIX SigmoidLayer::getWeights() {
     return this->weights;
   }
 
-  void SigmoidLayer::setWeights(vector<vector<double> > newWeights) {
+  void SigmoidLayer::setWeights(MATRIX newWeights) {
     this->weights = newWeights;
   }
 
@@ -69,36 +69,25 @@ namespace sigmoid {
     this->weights[row][col] = newWeight;
   }
 
-  void SigmoidLayer::setBiases(vector<double> biases) {
+  void SigmoidLayer::setBiases(MATRIX biases) {
     this->biases = biases;
   }
 
   void SigmoidLayer::setBias(double newBias, int neuron) {
-    this->biases[neuron] = newBias;
+    this->biases[neuron][0] = newBias;
   }
 
-  vector<double> SigmoidLayer::dotAndBiased(vector<double> inputs) {
-    vector<double> result(layerLength, 0);
-    int inputLength = inputs.size();
-
-    for(int j = 0; j < layerLength; j++) {
-      for(int i = 0; i < inputLength; i++) {
-	result[j] += this->weights[j][i] * inputs[i];
-      }
-    }
-
-    for(int j = 0; j < layerLength; j++) {
-      result[j] += this->biases[j];
-    }
-
-    return result;
+  MATRIX SigmoidLayer::dotAndBiased(MATRIX inputs) {
+    Matrix::printMatrix(inputs);
+    MATRIX wproduct = Matrix::matrixMultiply(this->weights, inputs);
+    return Matrix::sum(wproduct, this->biases);
   }
 
-  vector<double> SigmoidLayer::activations(vector<double> z) {
-    vector<double> activations = z;
+  MATRIX SigmoidLayer::activations(MATRIX z) {
+    MATRIX activations = z;
     for (int i = 0; i < layerLength; i++) {
-      double sigmoidified = this->sigmoid(activations[i]);
-      activations[i] = sigmoidified;
+      double sigmoidified = this->sigmoid(activations[i][0]);
+      activations[i][0] = sigmoidified;
     }
 
     return activations;
@@ -121,7 +110,7 @@ namespace sigmoid {
   }
 
   string SigmoidLayer::biasString() {
-    return Matrix::stringRowLabel(this->biases, "bias");
+    return Matrix::stringMatrixLabel(this->biases, "bias");
   }
 
   double  SigmoidLayer::sigmoid(double w) {
