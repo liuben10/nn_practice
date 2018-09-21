@@ -4,14 +4,10 @@
  *  Created on: Jan 4, 2018
  *      Author: liuben10
  */
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
 #include "WeightsAndBiasUpdates.h"
 #include <string>
 
 using namespace std;
-using namespace boost::multiprecision;
-
 
 namespace sigmoid {
 
@@ -53,11 +49,6 @@ namespace sigmoid {
   WeightsAndBiasUpdates::WeightsAndBiasUpdates() {
     this->weightUpdates = vector<MATRIX>();
     this->biasUpdates = vector<MATRIX>();
-  }
-
-  WeightsAndBiasUpdates::~WeightsAndBiasUpdates() {
-    this->weightUpdates.clear();
-    this->biasUpdates.clear();
   }
 
   string WeightsAndBiasUpdates::toString() {

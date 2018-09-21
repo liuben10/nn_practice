@@ -4,13 +4,12 @@
  *  Created on: Dec 29, 2017
  *      Author: liuben10
  */
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #ifndef INPUT_H_
 #define INPUT_H_
 
 #include <string>
 using namespace std;
-using namespace boost::multiprecision;
+
 
 
 namespace sigmoid {

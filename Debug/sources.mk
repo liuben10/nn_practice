@@ -21,7 +21,8 @@ OBJS :=
 C_UPPER_DEPS := 
 CXX_DEPS := 
 CPP_DEPS := 
-C_DEPS := 
+C_DEPS :=
+DEBUG_OBJS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \

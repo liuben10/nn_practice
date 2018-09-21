@@ -4,7 +4,6 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
-
 #include "SigmoidLayer.h"
 
 #include "Matrix.h"
@@ -88,8 +87,7 @@ namespace sigmoid {
   MATRIX SigmoidLayer::activations(MATRIX z) {
     MATRIX activations = z;
     for (int i = 0; i < layerLength; i++) {
-      double sigmoidified = this->sigmoid(activations[i][0]);
-      activations[i][0] = sigmoidified;
+      activations[i][0] = this->sigmoid(activations[i][0]);
     }
 
     return activations;
@@ -116,15 +114,7 @@ namespace sigmoid {
   }
 
   double  SigmoidLayer::sigmoid(double w) {
-    double raised;
-    if (w < 0) {
-      raised = 1 / exp(w);
-    } else {
-      raised = exp(w);
-    }
-    double exponentiated = 1 / raised;
-    
-    return 1 / (1 + exponentiated);
+    return ((double)1) / (1 + exp(-1 * w));
   }
 
   double SigmoidLayer::derivSigmoid(double z) {

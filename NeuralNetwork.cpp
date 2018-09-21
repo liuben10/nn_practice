@@ -12,7 +12,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace boost::multiprecision;
+
 
 namespace sigmoid {
 
@@ -60,9 +60,8 @@ namespace sigmoid {
     }
     for(int i = this->layers.size() - 1; i >= 0; i--) {
       SigmoidLayer *layer = this->layers[i];
-      cout << "\ni=" << i << " here \n";
-      layer->applyWeight(weightAndBiasUpdates.weightAt(i));
-      layer->applyBiases(weightAndBiasUpdates.biasAt(i));
+      layer->applyWeight(Matrix::multiplyByScalar(weightAndBiasUpdates.weightAt(i), -1 * LEARNING_RATE));
+      layer->applyBiases(Matrix::multiplyByScalar(weightAndBiasUpdates.biasAt(i), -1 * LEARNING_RATE));
     }
   }
 
@@ -114,7 +113,7 @@ namespace sigmoid {
 
       Matrix::printMatrixSmallLabel(prevWeights, "prev_weights");
 
-      delta = Matrix::matrixMultiply(delta, prevWeights);
+      delta = Matrix::matrixMultiply(Matrix::transpose(delta), prevWeights);
 
       Matrix::printMatrixSmallLabel(delta, "delta_after_transpose_and_multiply");
 
@@ -160,6 +159,7 @@ namespace sigmoid {
   MATRIX NeuralNetwork::feedForwardWithSave(MATRIX input, vector<MATRIX> *zvecsCont, vector<MATRIX> *activationCont) {
     MATRIX lastResult = MATRIX(input);
     for(int i = 0; i < this->layers.size(); i++) {
+      cout << "feed_forward_with_save=" << i << endl;
       SigmoidLayer *currentLayer = this->layers[i];
       
       MATRIX zvector = currentLayer->dotAndBiased(lastResult);
@@ -182,10 +182,10 @@ namespace sigmoid {
   }
 
   MATRIX NeuralNetwork::feedForward(MATRIX input) {   
-    MATRIX lastResult = MATRIX(input);
+    MATRIX lastResult(input);
     // Matrix::printMatrix(lastResult);
     for(int i = 0; i < this->layers.size(); i++) {
-      cout << "i=" << i << "\n";
+      cout << "feed_forward=" << i << "\n";
       SigmoidLayer *currentLayer = this->layers[i];
 
       MATRIX zvector = currentLayer->dotAndBiased(lastResult);
@@ -194,9 +194,6 @@ namespace sigmoid {
       lastResult = activation;
     }
     return lastResult;
-  }
-
-  NeuralNetwork::~NeuralNetwork() {
   }
 
 } /* namespace sigmoid */

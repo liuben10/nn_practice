@@ -4,7 +4,6 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
-
 #include "Matrix.h"
 #include <vector>
 #include <string>

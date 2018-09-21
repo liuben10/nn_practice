@@ -32,13 +32,22 @@ CPP_DEPS += \
 ./WeightsAndBiasUpdates.d
 
 MATRIX_TEST_SRCS += \
-../MatrixTest.cpp
+./MatrixTest.cpp
 
 MATRIX_TEST_OBJS += \
-../MatrixTest.o
+./MatrixTest.o
 
 MATRIX_TEST_DEPS += \
-../MatrixTest.d
+./MatrixTest.d
+
+DEBUG_OBJS += \
+./Main.g \
+./Matrix.g \
+./NeuralNetwork.g \
+./Neuron.g \
+./SigmoidLayer.g \
+./Util.g \
+./WeightsAndBiasUpdates.g
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -46,8 +55,6 @@ MATRIX_TEST_DEPS += \
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	clang++ -std=c++11 -I ../../Libraries/boost_1_67_0 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<" -w
+	g++ -g -std=c++11 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<" -w
 	@echo 'Finished building: $<'
 	@echo ' '
-
-

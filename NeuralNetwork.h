@@ -13,9 +13,10 @@
 #define NEURALNETWORK_H_
 
 using namespace std;
-using namespace boost::multiprecision;
 
 
+
+#define LEARNING_RATE 0.05
 namespace sigmoid {
 
   class NeuralNetwork {
@@ -31,7 +32,6 @@ namespace sigmoid {
     MATRIX costDerivative(MATRIX activation, MATRIX expected);
     void applyUpdates(WeightsAndBiasUpdates updates);
     void printNetwork();
-    virtual ~NeuralNetwork();
   };
 
 } /* namespace sigmoid */

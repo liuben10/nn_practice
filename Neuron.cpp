@@ -4,9 +4,6 @@
  *  Created on: Dec 29, 2017
  *      Author: liuben10
  */
-
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
 #include "Neuron.h"
 #include <utility>
 #include <map>
@@ -17,7 +14,7 @@
 
 using namespace std;
 using std::unique_ptr;
-using namespace boost::multiprecision;
+
 
 
 namespace sigmoid {

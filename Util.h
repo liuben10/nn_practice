@@ -4,8 +4,6 @@
  *  Created on: Dec 31, 2017
  *      Author: liuben10
  */
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -16,7 +14,7 @@
 #include <stdlib.h>
 
 using namespace std;
-using namespace boost::multiprecision;
+
 
 
 namespace sigmoid {

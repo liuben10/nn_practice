@@ -4,14 +4,12 @@
  *  Created on: Dec 30, 2017
  *      Author: liuben10
  */
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
 #include "Matrix.h"
 #include <vector>
 #include <math.h>
 
 using namespace std;
-using namespace boost::multiprecision;
+
 
 #ifndef COSTER_H_
 #define COSTER_H_

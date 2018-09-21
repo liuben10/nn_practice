@@ -1,5 +1,3 @@
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
 #include <iterator>
 #include <algorithm>
 
@@ -13,7 +11,7 @@
 
 using namespace std;
 using namespace sigmoid;
-using namespace boost::multiprecision;
+
 
 
 typedef unsigned char uchar;
@@ -216,9 +214,10 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
 
 void checkSigmoidSafe() {
   int numLayers = 3;
-  int neurons[3] = {2, 2, 1};
+  int neurons[3] = {3, 3, 2};
   NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
-  for(int i = 0; i < 100; i++) {
+  ROW errors = ROW();
+  for(int i = 0; i < 1000; i++) {
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
@@ -228,26 +227,40 @@ void checkSigmoidSafe() {
     cout << "###########################################" << "\n";
 
     
-    MATRIX input = MATRIX(2, ROW(1, 0.0));
-    input[1] = ROW(1, 1);
+    MATRIX input = MATRIX(3, ROW(1, 0.0));
+    MATRIX expected = MATRIX(2, ROW(1, 0));
+    input[i%3][0] = 1;
+    expected[i%2][0] = 1;
 
-    MATRIX output = nn.feedForward(input);
-    for(int i = 0; i < output.size(); i++) {
-      cout << "Checking Sigmoid Output=" << output[i][0] << "\n";
+    
+    if (i % 25 == 0) {
+      MATRIX output = nn.feedForward(input);
+      double error = Coster::evaluate(output, expected);
+      cout << "Total Error at iteration (" << i << ")="
+	   << error;
+      errors.push_back(error);
     }
 
-    MATRIX expected;
-    expected.push_back(ROW(1, 1));
+    
     WeightsAndBiasUpdates wb = nn.backPropagate(input, expected);
     nn.applyUpdates(wb);
     cout << "\n" << wb.toString() << "\n\n Post Update \n\n";
     nn.printNetwork();
   }
   
-  MATRIX input = MATRIX();
-  input.push_back(ROW(1, 0));
-  input.push_back(ROW(1, 1));
-  nn.feedForward(input);
+  MATRIX input = MATRIX(3, ROW(1, 0));
+  MATRIX expected = MATRIX(2, ROW(1, 0));
+  
+  input[1] = ROW(1, 1);
+  expected[1] = ROW(1, 1);
+
+  MATRIX prediction = nn.feedForward(input);
+  Matrix::printMatrixLabel(prediction, "output");
+  
+  cout << "Total Error=" 
+       << Coster::evaluate(prediction, expected)
+       << "\n\n";
+  Matrix::printRowLabel(errors, "errors");
 }
 
 template<typename T, typename... Args>
@@ -318,8 +331,8 @@ void checkSigmoidRand() {
 int main()
 {
   // checkSigmoidRand();
-  checkMain();
-  //  checkSigmoidSafe();
+  // checkMain();
+  checkSigmoidSafe();
   return 0;
 }
 

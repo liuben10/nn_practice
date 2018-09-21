@@ -4,7 +4,6 @@
  *  Created on: Jan 2, 2018
  *      Author: liuben10
  */
-
 #include <vector>
 #include <iostream>
 #include <string>
@@ -120,6 +119,15 @@ namespace sigmoid {
       }
 
       return transposed;
+    }
+
+    static MATRIX multiplyByScalar(MATRIX a, double scalar) {
+      for(int i = 0; i < a.size(); i++) {
+	for(int j = 0; j < a[0].size(); j++) {
+	  a[i][j] = a[i][j] * scalar;
+	}
+      }
+      return a;
     }
 
     static MATRIX transposeAndMultiply(MATRIX a, MATRIX b) {

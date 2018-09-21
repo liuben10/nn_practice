@@ -33,6 +33,9 @@ endif
 ifneq ($(strip $(MATRIX_TEST_DEPS)),)
 -include $(MATRIX_TEST_DEPS)
 endif
+ifneq ($(strip $(DEBUG_OBJS)),)
+-include $(DEBUG_OBJS)
+endif 
 endif
 
 -include ../makefile.defs
@@ -40,31 +43,35 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: NN
+all: Main
 
 # Tool invocations
-NN: $(OBJS) $(USER_OBJS)
+Main: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	clang++ -std=c++11 -o "Main" $(OBJS) $(USER_OBJS) $(LIBS) -w
+	g++ -g -std=c++11 -o "Main" $(OBJS) $(USER_OBJS) $(LIBS) -w -g
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) Sigmoid
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) Main
 	-@echo ' '
-
-BoostTest:
-	clang++ -std=c++11 ../boost_test.cpp -o "boost_test"
 
 MatrixTest: MatrixTest.o
 	@echo 'Running Matrix Tests'
-	clang++ -std=c++11 ../MatrixTest.cpp -o "matrix"
+	g++ -g -std=c++11 ../MatrixTest.cpp -o "matrix"
 
 SigmoidTest: SigmoidLayerTest.o SigmoidLayer.o
 	@echo 'Running SigmoidLayer Test'
-	clang++ -std=c++11 ../SigmoidLayerTest.cpp -o "sigtest"
+	g++ -g -std=c++11 ../SigmoidLayerTest.cpp -o "sigtest"
+
+Symbols: $(DEBUG_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: MacOS X C++ Linker'
+	g++ -g -std=c++11 -o "Main" $(DEBUG_BOJS) $(USER_OBJS) $(LIBS) -w
+	@echo 'Finished building target: $@'
+	@echo ' '
 
 .PHONY: all clean dependents
 
