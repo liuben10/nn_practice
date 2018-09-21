@@ -38,7 +38,6 @@ namespace sigmoid {
     string weightString();
     string biasString();
     string toString();
-    virtual ~SigmoidLayer();
   };
 
 } /* namespace sigmoid */

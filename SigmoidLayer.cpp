@@ -79,6 +79,7 @@ namespace sigmoid {
   MATRIX SigmoidLayer::dotAndBiased(MATRIX inputs) {
     Matrix::printMatrixSmallLabel(inputs, "input");
     MATRIX wproduct = Matrix::matrixMultiply(this->weights, inputs);
+    Matrix::printMatrixSmallLabel(wproduct, "product");
     MATRIX sum = Matrix::sum(wproduct, this->biases);
     Matrix::printMatrixSmallLabel(sum, "sum");
     return sum;
@@ -113,16 +114,13 @@ namespace sigmoid {
     return Matrix::stringMatrixLabel(this->biases, "bias");
   }
 
-  double  SigmoidLayer::sigmoid(double w) {
+  double SigmoidLayer::sigmoid(double w) {
     return ((double)1) / (1 + exp(-1 * w));
   }
 
   double SigmoidLayer::derivSigmoid(double z) {
     double  sigZ = SigmoidLayer::sigmoid(z);
     return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
-  }
-
-  SigmoidLayer::~SigmoidLayer() {
   }
 
 } /* namespace sigmoid */

@@ -40,11 +40,10 @@ namespace sigmoid {
     }
 
     static MATRIX sum(MATRIX a, MATRIX b) {
-      MATRIX result = MATRIX(a.size(), vector<double>(a[0].size(), 0));
+      MATRIX result = MATRIX(a);
       for(int i = 0; i < a.size(); i++) {
-	vector<double> row(a[i].size(), 0);
-	for(int j = 0; j < b.size(); j++) {
-	  result[i][j] = a[i][j] + b[i][j];
+	for(int j = 0; j < a[0].size(); j++) {
+	  result[i][j] += b[i][j];
 	}
       }
       return result;

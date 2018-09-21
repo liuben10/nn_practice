@@ -49,7 +49,7 @@ all: Main
 Main: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	g++ -g -std=c++11 -o "Main" $(OBJS) $(USER_OBJS) $(LIBS) -w -g
+	g++ -g -std=c++11 -o "Main" $(OBJS) $(USER_OBJS) $(LIBS) -w
 	@echo 'Finished building target: $@'
 	@echo ' '
 
