@@ -212,6 +212,17 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
 //   ROW activations = sl->dotAndBiased(inputsVec);
 // }
 
+void checkSigmoidVeryEasy() {
+  int numLayers = 4;
+  int neurons[4] = {4, 3, 3, 2};
+  NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
+  MATRIX input = MATRIX(4, ROW(1, 0));
+  input[1][0] = 1;
+  input[3][0] = 1;
+  MATRIX activations = nn.feedForward(input);
+  Matrix::printMatrix(activations);
+}
+
 void checkSigmoidSafe() {
   int numLayers = 3;
   int neurons[3] = {3, 3, 2};
@@ -333,6 +344,7 @@ int main()
   // checkSigmoidRand();
   // checkMain();
   checkSigmoidSafe();
+  // checkSigmoidVeryEasy();
   return 0;
 }
 

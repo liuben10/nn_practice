@@ -9,6 +9,7 @@
 #include "Util.h"
 #include "Matrix.h"
 #include "WeightsAndBiasUpdates.h"
+#include "SigmoidLayer.h"
 #include <iostream>
 
 using namespace std;
@@ -29,7 +30,7 @@ namespace sigmoid {
     this->layers = vector<SigmoidLayer *>();
 
     for(int i = 0; i < layers-1; i++) {
-      SigmoidLayer *sl = new SigmoidLayer(neurons[i], neurons[i+1]);
+      SigmoidLayer * sl = new SigmoidLayer(neurons[i], neurons[i+1]);
       this->layers.push_back(sl);
       cout << "layer=" << i << ", weights=" << sl->getWeights().size() << ", " << sl->getWeights()[0].size() 
 	   << ", biases=" << sl->getBiases().size() << ", " << sl->getBiases()[0].size()
@@ -42,7 +43,7 @@ namespace sigmoid {
   void NeuralNetwork::printNetwork() {
     cout << "==============NeuralNetwork===========" << "\n";
     for(int i = 0; i < layers.size(); i++) {
-      SigmoidLayer *sl = this->layers[i];
+      SigmoidLayer * sl = this->layers[i];
       cout << sl->toString() << "\n";
     }
     cout << "====================================" << "\n";
@@ -59,7 +60,7 @@ namespace sigmoid {
       throw "ERROR bias update size doesn't match";
     }
     for(int i = this->layers.size() - 1; i >= 0; i--) {
-      SigmoidLayer *layer = this->layers[i];
+      SigmoidLayer * layer = this->layers[i];
       layer->applyWeight(Matrix::multiplyByScalar(weightAndBiasUpdates.weightAt(i), -1 * LEARNING_RATE));
       layer->applyBiases(Matrix::multiplyByScalar(weightAndBiasUpdates.biasAt(i), -1 * LEARNING_RATE));
     }
@@ -103,7 +104,7 @@ namespace sigmoid {
       printf("\n=====iter: %d=======\n", i);
       MATRIX zvector = zvectors->at(i);
 
-      SigmoidLayer *outputLayer =  this->layers[i+1];
+      SigmoidLayer * outputLayer =  this->layers[i+1];
       MATRIX prevWeights = outputLayer->getWeights();
       MATRIX sp = this->sigmoidDeriv(zvector);
 
@@ -160,7 +161,7 @@ namespace sigmoid {
     MATRIX lastResult = MATRIX(input);
     for(int i = 0; i < this->layers.size(); i++) {
       cout << "feed_forward_with_save=" << i << endl;
-      SigmoidLayer *currentLayer = this->layers[i];
+      SigmoidLayer * currentLayer = this->layers[i];
       
       MATRIX zvector = currentLayer->dotAndBiased(lastResult);
       zvecsCont->push_back(zvector);
@@ -186,7 +187,7 @@ namespace sigmoid {
     // Matrix::printMatrix(lastResult);
     for(int i = 0; i < this->layers.size(); i++) {
       cout << "feed_forward=" << i << "\n";
-      SigmoidLayer *currentLayer = this->layers[i];
+      SigmoidLayer * currentLayer = this->layers[i];
 
       MATRIX zvector = currentLayer->dotAndBiased(lastResult);
 

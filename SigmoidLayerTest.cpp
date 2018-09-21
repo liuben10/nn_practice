@@ -43,16 +43,25 @@ ROW test_row(double seed) {
   return testRow;
 }
 
+void isItWithNN() {
+  int layers = 3;
+  int neurons = {2, 2, 2};
+  NeuralNetwork nn(neurons, numlayers);
+  MATRIX input = MATRIX(3, row(1, 0));
+  input[1][0] = 1;
+  Matrix::printMatrix(input);
+}
+
 void testZVector() {
-  SigmoidLayer test(2, 2);
+  SigmoidLayer test(3, 2);
   cout << test.toString() << "\n";
-  MATRIX a = test_matrix_with_dims(0.8, 2, 1);
+  MATRIX a = test_matrix_with_dims(0.08, 3, 1);
   MATRIX zvec = test.dotAndBiased(a);
   Matrix::printMatrix(zvec);
   MATRIX activations = test.activations(zvec);
-  Matrix::printMatrix(activations);
+  Matrix::printMatrix(activations);  
 }
 
 int main() {
-  testZVector();
+  isItWithNN();
 }
