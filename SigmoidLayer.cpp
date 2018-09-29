@@ -39,6 +39,12 @@ namespace sigmoid {
   void SigmoidLayer::applyWeight(MATRIX deltaW) {
     Matrix::printMatrixSmallLabel(deltaW, "deltaW");
     Matrix::printMatrixSmallLabel(this->weights, "weights");
+    if (deltaW.size() != this->weights.size() || deltaW[0].size() != this->weights[0].size()) {
+      cerr << "Error Weights do not match" << "\n";
+      Matrix::printMatrixSmallLabel(deltaW, "deltaW");
+      Matrix::printMatrixSmallLabel(this->weights, "weights");
+      throw "Error Weights do not match";
+    }
     for(int i = 0; i < this->weights.size(); i++) {
       for(int j = 0; j < this->weights[0].size(); j++) {
 	this->weights[i][j] = this->weights[i][j] + deltaW[i][j];
@@ -47,6 +53,12 @@ namespace sigmoid {
   }
   
   void SigmoidLayer::applyBiases(MATRIX deltaB) {
+    if (deltaB.size() != this->biases.size() || deltaB[0].size() != this->biases[0].size()) {
+      cerr << "Error Biases do not match" << "\n";
+      Matrix::printMatrixSmallLabel(deltaB, "deltaB");
+      Matrix::printMatrixSmallLabel(this->biases, "biases");
+      throw "Error Biases do not match";
+    }
     for(int i = 0; i < this->biases.size(); i++) {
       this->biases[i][0] = this->biases[i][0] + deltaB[i][0];
     }

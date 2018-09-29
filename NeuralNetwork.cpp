@@ -95,7 +95,7 @@ namespace sigmoid {
     Matrix::printMatrixSmallLabel(weightUpdate, "newWeightUpdate");
 
     updates.addBiasUpdate(biasUpdate);
-    updates.addWeightUpdate(weightUpdate);
+    updates.addWeightUpdate(Matrix::transpose(weightUpdate));
 
     int layers = this->layers.size() - 2;
     printf("weightDims={row=%d, col=%d}", weightUpdate.size(), weightUpdate[0].size());
@@ -123,12 +123,19 @@ namespace sigmoid {
       Matrix::printMatrixSmallLabel(delta, "delta_after_hadamard_product");
 
       biasUpdate = delta;
-      weightUpdate = Matrix::matrixMultiply(activations->at(i), Matrix::transpose(delta));
+
+      MATRIX prevActivations;
+      if (i - 1 >= 0) {
+	prevActivations = activations->at(i-1);
+      } else {
+	prevActivations = input;
+      }
+      weightUpdate = Matrix::matrixMultiply(prevActivations, Matrix::transpose(delta));
       Matrix::printMatrixLabel(weightUpdate, "weight_update");
       Matrix::printMatrixLabel(biasUpdate, "bias_update");
       
       updates.addBiasUpdate(biasUpdate);
-      updates.addWeightUpdate(weightUpdate);
+      updates.addWeightUpdate(Matrix::transpose(weightUpdate));
 
       printf("\n====\n");
     }

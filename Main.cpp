@@ -298,22 +298,22 @@ void checkMain() {
   int sigmoidLayers[4] = {784, 16, 16, 10};
   NeuralNetwork network = NeuralNetwork(sigmoidLayers, numLayers);
 
-  // for(int k = 0; k < 5; k++) {
-  //   cout << "Training :" << k << "\n";
-  //   Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+  for(int k = 0; k < 20; k++) {
+    cout << "Training :" << k << "\n";
+    Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
-  //   //       ROW output = network.feedForward(input->getValues());
+    //       ROW output = network.feedForward(input->getValues());
 
-  //   MATRIX expectedBin = Coster::toBinary(input.getExpected());
+    MATRIX expectedBin = Coster::toBinary(input.getExpected());
 
-  //   WeightsAndBiasUpdates updates = network.backPropagate(*(input.getValues()), expectedBin);
+    WeightsAndBiasUpdates updates = network.backPropagate(*(input.getValues()), expectedBin);
 
-  //   std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
+    std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
 
-  //   network.applyUpdates(updates);
+    network.applyUpdates(updates);
 
-  //   //        printf("\n\n == k: %d == \n\n", k);
-  // }
+    //        printf("\n\n == k: %d == \n\n", k);
+  }
 
   Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
   
@@ -342,8 +342,8 @@ void checkSigmoidRand() {
 int main()
 {
   // checkSigmoidRand();
-  // checkMain();
-  checkSigmoidSafe();
+  checkMain();
+  // checkSigmoidSafe();
   // checkSigmoidVeryEasy();
   return 0;
 }

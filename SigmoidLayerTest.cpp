@@ -63,5 +63,6 @@ void testZVector() {
 }
 
 int main() {
-  isItWithNN();
+  vector<double> test(15, 1);
+  cout << test[16] << "\n";
 }
