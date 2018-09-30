@@ -141,9 +141,6 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
   // show a random character
   int ind;
 
-  /* initialize random seed: */
-  srand ( time(NULL) );
-
   /* generate secret number: */
   ind = rand() % number_of_images;
   //ind = 59879;
@@ -166,10 +163,10 @@ Wrapper showRandomCharacterInBinary(uchar **dataset, uchar *labels, int number_o
       double cur = dataset[ind][i*28 + j];
       if(dataset[ind][i*28+j] > 80) {
 	cout << 1;
-	result.getValues()->at(i*28 + j) = vector<double>(1, cur);
+	result.getValues()->at(i*28 + j) = vector<double>(1, 1);
       } else {
 	cout << 0;
-	result.getValues()->at(i*28 + j) = vector<double>(1, cur);
+	result.getValues()->at(i*28 + j) = vector<double>(1, 0);
       }
     }
     cout << "" << endl;
@@ -228,7 +225,7 @@ void checkSigmoidSafe() {
   int neurons[3] = {3, 3, 2};
   NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
   ROW errors = ROW();
-  for(int i = 0; i < 1000; i++) {
+  for(int i = 0; i < 3000; i++) {
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
@@ -280,10 +277,19 @@ static std::unique_ptr<T> make_unique(Args&&... args)
   return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
+MATRIX getExpected(int expected) {
+  MATRIX expectedBin = MATRIX(10, ROW(1, 0));
+  expectedBin[expected] = ROW(1, 1);
+  return expectedBin;
+}
+
+
 void checkMain() {
   int number_of_images;
   int image_size;
   int BATCH_SIZE = 100;
+  
+  srand ( time(NULL) );
 
   /*
     TRAINING SET - 60 000 images
@@ -298,17 +304,26 @@ void checkMain() {
   int sigmoidLayers[4] = {784, 16, 16, 10};
   NeuralNetwork network = NeuralNetwork(sigmoidLayers, numLayers);
 
-  for(int k = 0; k < 20; k++) {
+  vector<double> errors = vector<double>();
+
+  for(int k = 0; k < 100; k++) {
     cout << "Training :" << k << "\n";
     Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
     //       ROW output = network.feedForward(input->getValues());
 
-    MATRIX expectedBin = Coster::toBinary(input.getExpected());
+    if (k % 1 == 0) {
+      MATRIX output = network.feedForward(*(input.getValues()));
+      MATRIX expected = getExpected(input.getExpected());
+      double error = Coster::evaluate(output, expected);
+      errors.push_back(error);
+    }
+
+    MATRIX expectedBin = getExpected(input.getExpected());
 
     WeightsAndBiasUpdates updates = network.backPropagate(*(input.getValues()), expectedBin);
 
-    std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
+    // std::cout << "\n\n==Updates==\n\n" <<  updates.toString() << "\n\n\n\n";
 
     network.applyUpdates(updates);
 
@@ -323,6 +338,8 @@ void checkMain() {
   for(int i = 0; i < output.size(); i++) {
     cout << output[i][0] << "\n";
   }
+
+  Matrix::printRowLabel(errors, "error");
 }
 
 void checkSigmoidRand() {

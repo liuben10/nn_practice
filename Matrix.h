@@ -10,6 +10,8 @@
 #include <sstream>
 using namespace std;
 
+#define LOG 1
+
 
 #ifndef MATRIX_H_
 #define MATRIX_H_
@@ -18,28 +20,28 @@ using namespace std;
 
 #define ROW vector<double>
 
-//TODO FIX ME transpose is completely broken. That needs to be fixed.
-// I was way too baked looking at this code.
-
-//TODO Also, get rid of vector<double> only ever use MATRIX
-// And define a macro for it
 namespace sigmoid {
 
   class Matrix {
   public:
     static MATRIX hadamard(MATRIX a, MATRIX b) {
-      MATRIX res(a);
-      Matrix::printMatrixLabel(b, "sp_hadamard");
-      Matrix::printMatrixLabel(a, "delta_hadamard");
+      if (a.size() != b.size() || a[0].size() != b[0].size()) {
+	cerr << "Hadamard dimensions do not match" << endl;
+	throw "Hadamard dimensions do not match";
+      }
       for(int i = 0; i < a.size(); i++) {
 	for(int j = 0; j < a[i].size(); j++) {
-	  res[i][j] *= b[i][j];
+	  a[i][j] *= b[i][j];
 	}
       }
-      return res;
+      return a;
     }
 
     static MATRIX sum(MATRIX a, MATRIX b) {
+      if (a.size() != b.size() || a[0].size() != b[0].size()) {
+	cerr << "sum dimensions do not match" << endl;
+	throw "sum dimensions do not match";
+      }
       MATRIX result = MATRIX(a);
       for(int i = 0; i < a.size(); i++) {
 	for(int j = 0; j < a[0].size(); j++) {
@@ -57,15 +59,21 @@ namespace sigmoid {
     }
 
     static void printMatrix(MATRIX matrix) {
-      Matrix::printMatrixLabel(matrix, "matrix");
+      if (LOG) {
+	Matrix::printMatrixLabel(matrix, "matrix");
+      }
     }
 
     static void printMatrixSmall(MATRIX matrix) {
-      Matrix::printMatrixSmallLabel(matrix, "matrix");
+      if (LOG) {
+	Matrix::printMatrixSmallLabel(matrix, "matrix");
+      }
     }
 
     static void printMatrixSmallLabel(MATRIX matrix, string label) {
-      cout << Matrix::stringMatrixSmallLabel(matrix, label);
+      if (LOG) {
+	cout << Matrix::stringMatrixSmallLabel(matrix, label);
+      }
     }
 
     static string stringMatrixSmallLabel(MATRIX matrix, string label) {
@@ -91,11 +99,15 @@ namespace sigmoid {
     }
 
     static void printRow(vector<double> row) {
-      Matrix::printRowLabel(row, "row");
+      if (LOG) {
+	Matrix::printRowLabel(row, "row");
+      }
     }
 
     static void printRowLabel(vector<double> row, string label) {
-      cout << Matrix::stringRowLabel(row, label);
+      if (LOG) {
+	cout << Matrix::stringRowLabel(row, label);
+      }
     }
 
     static string stringRowLabel(vector<double> row, string label) {
@@ -148,8 +160,8 @@ namespace sigmoid {
       }
       MATRIX result = MATRIX(arows, vector<double>(bcols, 0));
       for(int i = 0; i < arows; i++) {
-	for(int j = 0; j < acols; j++) {
-	  for(int k = 0; k < bcols; k++) {
+	for(int k = 0; k < bcols; k++) {
+	  for(int j = 0; j < acols; j++) {
 	    result[i][k] += a[i][j] * b[j][k];
 	  }
 	}

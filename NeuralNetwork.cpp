@@ -50,7 +50,6 @@ namespace sigmoid {
   }
 
   void NeuralNetwork::applyUpdates(WeightsAndBiasUpdates weightAndBiasUpdates) {
-    cout << "weightUpdateSize=" <<  weightAndBiasUpdates.getWeightUpdates().size() << "\n";
     if (weightAndBiasUpdates.getWeightUpdates().size() != this->layers.size()) {
       cerr << "ERROR weight update size doesn't match" << "\n";
       throw "ERROR weight update size doesn't match";
@@ -131,8 +130,8 @@ namespace sigmoid {
 	prevActivations = input;
       }
       weightUpdate = Matrix::matrixMultiply(prevActivations, Matrix::transpose(delta));
-      Matrix::printMatrixLabel(weightUpdate, "weight_update");
-      Matrix::printMatrixLabel(biasUpdate, "bias_update");
+      // Matrix::printMatrixLabel(weightUpdate, "weight_update");
+      // Matrix::printMatrixLabel(biasUpdate, "bias_update");
       
       updates.addBiasUpdate(biasUpdate);
       updates.addWeightUpdate(Matrix::transpose(weightUpdate));
@@ -159,7 +158,7 @@ namespace sigmoid {
     checkIsColumnVector(expected, "expected");
     MATRIX delta = MATRIX(activation.begin(), activation.end());
     for(int i = 0; i < activation.size(); i++) {
-      delta[i][0] = 2 * (expected[i][0] - activation[i][0]);
+      delta[i][0] = -2 * (expected[i][0] - activation[i][0]);
     }
     return delta;
   }

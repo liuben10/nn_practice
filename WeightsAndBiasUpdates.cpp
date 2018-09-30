@@ -21,12 +21,12 @@ namespace sigmoid {
   }
 
   void WeightsAndBiasUpdates::addWeightUpdate(MATRIX weightUpdate) {
-    Matrix::printMatrixLabel(weightUpdate, "weight_update");
+    //    Matrix::printMatrixLabel(weightUpdate, "weight_update");
     this->weightUpdates = push_front(this->weightUpdates, weightUpdate);
   }
   
   void WeightsAndBiasUpdates::addBiasUpdate(MATRIX biasUpdate) {
-    Matrix::printMatrixLabel(biasUpdate, "bias_update");
+    //    Matrix::printMatrixLabel(biasUpdate, "bias_update");
     this->biasUpdates = push_front(this->biasUpdates, biasUpdate);
   }
 

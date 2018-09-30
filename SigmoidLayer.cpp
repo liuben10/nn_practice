@@ -127,12 +127,12 @@ namespace sigmoid {
   }
 
   double SigmoidLayer::sigmoid(double w) {
-    return ((double)1) / (1 + exp(-1 * w));
+    return 1.0 / (1.0 + exp(-w));
   }
 
   double SigmoidLayer::derivSigmoid(double z) {
     double  sigZ = SigmoidLayer::sigmoid(z);
-    return  sigZ * SigmoidLayer::sigmoid(1 - sigZ);
+    return  sigZ * (1 - sigZ);
   }
 
 } /* namespace sigmoid */
