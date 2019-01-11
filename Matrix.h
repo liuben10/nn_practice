@@ -110,6 +110,15 @@ namespace sigmoid {
       }
     }
 
+    static void printMatrixSucc(MATRIX input) {
+      for(int i = 0; i < input.size(); i++) {
+	for(int j = 0; j < input[0].size(); j++) {
+	  cout << input[i][j] << ", ";
+	}
+	cout << endl;
+      }
+    }
+
     static string stringRowLabel(vector<double> row, string label) {
       ostringstream output;
       for(int i = 0; i < row.size(); i++) {

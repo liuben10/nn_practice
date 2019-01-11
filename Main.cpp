@@ -29,6 +29,10 @@ public:
     return this->values;
   }
 
+  string print() {
+    Matrix::printMatrix(*this->values);
+  }
+
   Wrapper(int expected,MATRIX *values) {
     this->expected = expected;
     this->values = values;
@@ -306,9 +310,9 @@ void checkMain() {
 
   vector<double> errors = vector<double>();
 
+  Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
   for(int k = 0; k < 200; k++) {
     cout << "Training :" << k << "\n";
-    Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
     //       ROW output = network.feedForward(input->getValues());
 
@@ -330,15 +334,16 @@ void checkMain() {
     //        printf("\n\n == k: %d == \n\n", k);
   }
 
-  Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
-  
-
+  // Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+ 
   MATRIX output = network.feedForward(*(input.getValues()));
 
   for(int i = 0; i < output.size(); i++) {
     cout << output[i][0] << "\n";
   }
 
+  
+  cout << "Expected = " << input.getExpected() << endl;
   Matrix::printRowLabel(errors, "error");
 }
 
