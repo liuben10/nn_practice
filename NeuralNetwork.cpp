@@ -101,11 +101,11 @@ namespace sigmoid {
 
     for(int i = layers; i >= 0; i--) {
       printf("\n=====iter: %d=======\n", i);
-      MATRIX zvector = zvectors->at(i);
+      // MATRIX zvector = zvectors->at(i);
 
       SigmoidLayer * outputLayer =  this->layers[i+1];
       MATRIX prevWeights = outputLayer->getWeights();
-      MATRIX sp = this->sigmoidDeriv(zvector);
+      MATRIX sp = this->sigmoidDeriv(zvectors->at(i));
 
       Matrix::printMatrixSmallLabel(sp, "sigmoid_prime");
 
@@ -113,13 +113,13 @@ namespace sigmoid {
 
       Matrix::printMatrixSmallLabel(prevWeights, "prev_weights");
 
-      delta = Matrix::matrixMultiply(Matrix::transpose(delta), prevWeights);
+      delta = Matrix::matrixMultiply(Matrix::transpose(prevWeights), delta);
 
       Matrix::printMatrixSmallLabel(delta, "delta_after_transpose_and_multiply");
 
-      delta = Matrix::hadamard(Matrix::transpose(delta), sp);
+      delta = Matrix::hadamard(delta, sp);
 
-      Matrix::printMatrixSmallLabel(delta, "delta_after_hadamard_product");
+      // Matrix::printMatrixSmallLabel(delta, "delta_after_hadamard_product");
 
       biasUpdate = delta;
 
@@ -129,12 +129,12 @@ namespace sigmoid {
       } else {
 	prevActivations = input;
       }
-      weightUpdate = Matrix::matrixMultiply(prevActivations, Matrix::transpose(delta));
+      weightUpdate = Matrix::matrixMultiply(delta, Matrix::transpose(prevActivations));
       // Matrix::printMatrixLabel(weightUpdate, "weight_update");
       // Matrix::printMatrixLabel(biasUpdate, "bias_update");
       
       updates.addBiasUpdate(biasUpdate);
-      updates.addWeightUpdate(Matrix::transpose(weightUpdate));
+      updates.addWeightUpdate(weightUpdate);
 
       printf("\n====\n");
     }

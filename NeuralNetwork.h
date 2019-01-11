@@ -16,7 +16,7 @@ using namespace std;
 
 
 
-#define LEARNING_RATE .75
+#define LEARNING_RATE 300
 namespace sigmoid {
 
   class NeuralNetwork {

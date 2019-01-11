@@ -225,7 +225,7 @@ void checkSigmoidSafe() {
   int neurons[3] = {3, 3, 2};
   NeuralNetwork nn = NeuralNetwork(neurons, numLayers);
   ROW errors = ROW();
-  for(int i = 0; i < 3000; i++) {
+  for(int i = 0; i < 100; i++) {
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
     cout << "###########################################" << "\n";
@@ -306,7 +306,7 @@ void checkMain() {
 
   vector<double> errors = vector<double>();
 
-  for(int k = 0; k < 100; k++) {
+  for(int k = 0; k < 200; k++) {
     cout << "Training :" << k << "\n";
     Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
 
@@ -360,7 +360,7 @@ int main()
 {
   // checkSigmoidRand();
   checkMain();
-  // checkSigmoidSafe();
+  //  checkSigmoidSafe();
   // checkSigmoidVeryEasy();
   return 0;
 }
