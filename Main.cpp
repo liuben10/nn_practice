@@ -309,11 +309,13 @@ void checkMain() {
   NeuralNetwork network = NeuralNetwork(sigmoidLayers, numLayers);
 
   vector<double> errors = vector<double>();
-  for(int k = 0; k < 100000; k++) {
+  
+  Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+  for(int k = 0; k < 100; k++) {
     cout << "Training :" << k << "\n";
 
     
-    Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+    //    Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
     //       ROW output = network.feedForward(input->getValues());
 
     if (k % 1 == 0) {
@@ -334,7 +336,7 @@ void checkMain() {
     //        printf("\n\n == k: %d == \n\n", k);
   }
 
-  Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
+  // Wrapper input = showRandomCharacterInBinary(dataset, labels, number_of_images);
  
   MATRIX output = network.feedForward(*(input.getValues()));
 
